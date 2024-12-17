@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "АТТ Регистрация";
+}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="row w-100">
+        <div class="col-lg-6 mx-auto">
+            <h1 class="text-center mb-4 animated slideIn">Академия Транспортных технологий</h1>
+            <div class="authorization-card card shadow-lg p-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-4">Регистрация</h5>
+                    <form class="form" id="registrationForm">
+                        <div class="mb-4">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control form-control-lg" id="email"
+                                   placeholder="Введите email" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Пароль</label>
+                            <input type="password" class="form-control form-control-lg" id="password"
+                                   placeholder="Введите пароль" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="confirmPassword" class="form-label">Повторите пароль</label>
+                            <input type="password" class="form-control form-control-lg" id="confirmPassword"
+                                   placeholder="Повторите пароль" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="uniqueCode" class="form-label">Уникальный код</label>
+                            <input type="text" class="form-control form-control-lg" id="uniqueCode"
+                                   placeholder="Введите уникальный код" required>
+                        </div>
+                        <button type="submit"
+                                class="btn btn-primary w-100 btn-lg">
+                            Зарегистрироваться
+                        </button>
+                    </form>
+                    <div class="sign-in-link text-center mt-3">
+                        <p class="mb-0">
+                            Уже есть аккаунт? <a href="/Home/Login"
+                                                 class="text-decoration-none">Войти</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

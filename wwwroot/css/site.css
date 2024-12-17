@@ -1,0 +1,217 @@
+:root {
+    --bg-color: #2F2FA2;
+    --text-color: #f5f5f5;
+    --accent-color: #f64c72;
+    --contrast-color: #242582;
+}
+/* Заголовки анимация */
+@keyframes slideIn {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleUp {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: underline;
+}
+
+    a:hover {
+        text-decoration: none;
+    }
+
+/* Header */
+.header-top {
+    background-color: var(--contrast-color);
+}
+
+ul.social-icons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px;
+}
+
+    ul.social-icons li {
+        margin: 0;
+    }
+
+    ul.social-icons a {
+        width: 50px;
+        height: 50px;
+        line-height: 45px;
+        border-radius: 50%;
+        text-align: center;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+        ul.social-icons a:hover {
+            transform: scale(1.1);
+            background-color: var(--accent-color);
+        }
+
+.header-top-phone {
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+    .header-top-phone a {
+        text-decoration: none;
+        color: var(--text-color);
+        margin-left: 10px;
+    }
+
+        .header-top-phone a:hover {
+            text-decoration: underline;
+        }
+
+.header-top .container-fluid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .header-top .container-fluid .row {
+        display: flex;
+        align-items: center;
+    }
+
+/* Main Content */
+.main {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 0 15px;
+    background-color: var(--bg-color);
+}
+
+.registration-card {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    animation: scaleUp 0.6s ease-in-out;
+}
+
+.authorization-card {
+    animation: scaleUp 0.6s ease-in-out;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--contrast-color);
+    text-align: center;
+    margin-bottom: 30px;
+    animation: slideIn 1s ease-out;
+}
+
+.form button {
+    background-color: var(--contrast-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 1.2rem;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+    .form button:hover {
+        background-color: var(--accent-color);
+        transform: translateY(-2px);
+    }
+.mb-4 .form-label, .mb-0 {
+    color: var(--contrast-color);
+}
+.sign-in-link a, .sign-up-link a, .form a {
+    color: var(--accent-color);
+}
+
+    .sign-in-link a:hover, .sign-up-link a:hover {
+        text-decoration: underline;
+    }
+
+/* Footer */
+.footer-bottom {
+    background-color: var(--contrast-color);
+    color: var(--text-color);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0;
+}
+
+    .footer-bottom p {
+        margin-bottom: 0;
+    }
+
+/* Mobile */
+@media (max-width: 580px) {
+    .header-top-phone {
+        font-size: 0.9rem;
+    }
+
+    ul.social-icons {
+        justify-content: center;
+    }
+
+        ul.social-icons a {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+        }
+
+    .card {
+        margin-top: 10px;
+    }
+
+    .footer-bottom {
+        font-size: 0.8rem;
+    }
+}
