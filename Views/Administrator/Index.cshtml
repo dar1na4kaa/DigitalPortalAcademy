@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация - Академия Транспортных Технологий</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/user-style/user.css">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top py-3">
+                <div class="container-fluid">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="header-page col-auto">
+                            <div><a href="/assets/pages/admin/view-list-user.html">Пользователи</a></div>
+                        </div>
+                        <div class="header-page col-auto">
+                            <div><a href="/assets/pages/news/news.html">Объявления</a></div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="header-acoount d-flex align-items-center">
+                                <a href="/assets/pages/account/account.html">Личный кабинет</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Личный кабинет в организации</h2>
+                    <p class="card-text">Добро пожаловать в ваш личный кабинет. Здесь вы можете просматривать свою информацию, редактировать профиль и больше узнать о возможностях.</p>
+                    <h4 class="mb-4">Ваши данные:</h4>
+                    <div class="users-list">
+                        <!-- Пример карточки пользователя -->
+                        <div class="user-card">
+                            <div class="user-header">
+                                <img src="https://via.placeholder.com/80" alt="User Avatar" class="student-avatar">
+                                <div class="account-info">
+                                    <h4 class="student-name">Иван Иванов</h4>
+                                    <p class="student-email">ivan.ivanov@academia.com</p>
+                                </div>
+                            </div>
+                            <div class="account-details">
+                                <h5>Личные данные</h5>
+                                <p><strong>Дата рождения:</strong> 12.03.2000</p>
+                                <p><strong>Телефон:</strong> +7 999 123 45 67</p>
+                            </div>
+                            <div class="account-education">
+                                <h5>Образование</h5>
+                                <p><strong>Отделение:</strong> ДЭМ</p>
+                                <p><strong>Группа:</strong> ДИ-25</p>
+                                <p><strong>Специальность:</strong>09.02.07</p>
+                            </div>
+                            <div class="user-actions">
+                                <a href="/assets/pages/account/edit-account.html" class="btn btn-primary">Редактировать профиль</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-bottom py-2">
+                <div class="container-fluid text-center">
+                    <p class="mb-0">&copy; 2024 Академия Транспортных технологий</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/admin/"></script>
+</body>
+
+</html>

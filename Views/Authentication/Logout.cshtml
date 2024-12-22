@@ -25,12 +25,25 @@
                                    placeholder="Повторите пароль" required>
                         </div>
                         <div class="mb-4">
+                            <label for="fullName" class="form-label">ФИО</label>
+                            <input type="text" class="form-control form-control-lg" id="fullName"
+                                   placeholder="Введите ваше ФИО" required>
+                        </div>
+                        <div class="mb-4">
                             <label for="uniqueCode" class="form-label">Уникальный код</label>
                             <input type="text" class="form-control form-control-lg" id="uniqueCode"
                                    placeholder="Введите уникальный код" required>
                         </div>
-                        <button type="submit"
-                                class="btn btn-primary w-100 btn-lg">
+                        <div class="mb-4">
+                            <label for="role" class="form-label">Роль</label>
+                            <select class="form-select form-select-lg" id="role" required>
+                                <option value="" disabled selected>Выберите вашу роль</option>
+                                <option value="Student">Студент</option>
+                                <option value="Teacher">Преподаватель</option>
+                                <option value="Admin">Администратор</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 btn-lg">
                             Зарегистрироваться
                         </button>
                     </form>
@@ -44,3 +57,4 @@
             </div>
         </div>
     </div>
+</div>
