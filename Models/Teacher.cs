@@ -24,4 +24,6 @@ public partial class Teacher
     public virtual User? User { get; set; }
 
     public virtual ICollection<Subject> Subjects { get; set; } = new List<Subject>();
+    public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
+
 }

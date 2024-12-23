@@ -12,4 +12,6 @@ public partial class Subject
     public virtual ICollection<Mark> Marks { get; set; } = new List<Mark>();
 
     public virtual ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
+    public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
+
 }

@@ -20,4 +20,6 @@ public partial class Group
     public virtual Specialty Specialty { get; set; } = null!;
 
     public virtual ICollection<Student> Students { get; set; } = new List<Student>();
+    public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
+
 }

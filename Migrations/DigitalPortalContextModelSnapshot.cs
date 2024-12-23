@@ -22,6 +22,26 @@ namespace DigitalPortalAcademy.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DigitalPortalAcademy.Models.Building", b =>
+                {
+                    b.Property<int>("BuildingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("BuildingID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BuildingId"));
+
+                    b.Property<string>("BuildingName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("BuildingId")
+                        .HasName("PK__Buildings__B2079BCD98B0068E");
+
+                    b.ToTable("Buildings");
+                });
+
             modelBuilder.Entity("DigitalPortalAcademy.Models.Curator", b =>
                 {
                     b.Property<int>("CuratorId")
@@ -235,6 +255,131 @@ namespace DigitalPortalAcademy.Migrations
                     b.ToTable("Marks");
                 });
 
+            modelBuilder.Entity("DigitalPortalAcademy.Models.PairSchedule", b =>
+                {
+                    b.Property<int>("PairScheduleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("PairScheduleID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PairScheduleId"));
+
+                    b.Property<int>("BuildingId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("PairNumber")
+                        .HasColumnType("int")
+                        .HasColumnName("PairNumber");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("PairScheduleId")
+                        .HasName("PK__PairSche__C23C9E9E2454BE2F");
+
+                    b.HasIndex("BuildingId");
+
+                    b.ToTable("PairSchedules");
+                });
+
+            modelBuilder.Entity("DigitalPortalAcademy.Models.Role", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("RoleID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            Name = "Администратор"
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            Name = "Студент"
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            Name = "Педагог-организатор"
+                        },
+                        new
+                        {
+                            RoleId = 4,
+                            Name = "Сотрудник уч.части"
+                        },
+                        new
+                        {
+                            RoleId = 5,
+                            Name = "Преподаватель"
+                        });
+                });
+
+            modelBuilder.Entity("DigitalPortalAcademy.Models.Schedule", b =>
+                {
+                    b.Property<int>("ScheduleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ScheduleID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScheduleId"));
+
+                    b.Property<string>("DayOfWeek")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int")
+                        .HasColumnName("GroupID");
+
+                    b.Property<int>("PairScheduleId")
+                        .HasColumnType("int")
+                        .HasColumnName("PairScheduleID");
+
+                    b.Property<int?>("PairScheduleId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("SubjectID");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int")
+                        .HasColumnName("TeacherID");
+
+                    b.HasKey("ScheduleId")
+                        .HasName("PK__Schedules__D40A58A34B7173D4");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("PairScheduleId");
+
+                    b.HasIndex("PairScheduleId1");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("Schedules");
+                });
+
             modelBuilder.Entity("DigitalPortalAcademy.Models.Specialty", b =>
                 {
                     b.Property<int>("SpecialtyId")
@@ -253,6 +398,40 @@ namespace DigitalPortalAcademy.Migrations
                         .HasName("PK__Specialt__D768F6485CDEFD27");
 
                     b.ToTable("Specialties");
+                });
+
+            modelBuilder.Entity("DigitalPortalAcademy.Models.Staff", b =>
+                {
+                    b.Property<int>("StaffId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffId"));
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Staff");
                 });
 
             modelBuilder.Entity("DigitalPortalAcademy.Models.Student", b =>
@@ -399,11 +578,9 @@ namespace DigitalPortalAcademy.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UniqueCodeId"));
 
                     b.Property<bool?>("IsUsed")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
-                    b.Property<string>("UniqueCode1")
+                    b.Property<string>("UniqueCodeName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
@@ -412,7 +589,7 @@ namespace DigitalPortalAcademy.Migrations
                     b.HasKey("UniqueCodeId")
                         .HasName("PK__UniqueCo__4D0875247BDABA20");
 
-                    b.HasIndex(new[] { "UniqueCode1" }, "UQ__UniqueCo__BB96DE6FDD60D19A")
+                    b.HasIndex(new[] { "UniqueCodeName" }, "UQ__UniqueCo__BB96DE6FDD60D19A")
                         .IsUnique();
 
                     b.ToTable("UniqueCodes");
@@ -439,17 +616,17 @@ namespace DigitalPortalAcademy.Migrations
 
                     b.Property<string>("PhotoPath")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasDefaultValue("~/DigitalPortalAcademy.user.jpg");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId")
                         .HasName("PK__Users__1788CCAC902B8927");
+
+                    b.HasIndex("RoleId");
 
                     b.HasIndex(new[] { "Email" }, "UQ__Users__A9D105343915BEBC")
                         .IsUnique();
@@ -521,6 +698,7 @@ namespace DigitalPortalAcademy.Migrations
                     b.HasOne("DigitalPortalAcademy.Models.Specialty", "Specialty")
                         .WithMany("Groups")
                         .HasForeignKey("SpecialtyId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Group_Specialty");
 
@@ -546,6 +724,68 @@ namespace DigitalPortalAcademy.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("DigitalPortalAcademy.Models.PairSchedule", b =>
+                {
+                    b.HasOne("DigitalPortalAcademy.Models.Building", "Building")
+                        .WithMany("PairSchedules")
+                        .HasForeignKey("BuildingId")
+                        .IsRequired()
+                        .HasConstraintName("FK_PairSchedule_Building");
+
+                    b.Navigation("Building");
+                });
+
+            modelBuilder.Entity("DigitalPortalAcademy.Models.Schedule", b =>
+                {
+                    b.HasOne("DigitalPortalAcademy.Models.Group", "Group")
+                        .WithMany("Schedules")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Schedule_Group");
+
+                    b.HasOne("DigitalPortalAcademy.Models.PairSchedule", "PairSchedule")
+                        .WithMany()
+                        .HasForeignKey("PairScheduleId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Schedule_PairSchedule");
+
+                    b.HasOne("DigitalPortalAcademy.Models.PairSchedule", null)
+                        .WithMany("Schedules")
+                        .HasForeignKey("PairScheduleId1");
+
+                    b.HasOne("DigitalPortalAcademy.Models.Subject", "Subject")
+                        .WithMany("Schedules")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Schedule_Subject");
+
+                    b.HasOne("DigitalPortalAcademy.Models.Teacher", "Teacher")
+                        .WithMany("Schedules")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Schedule_Teacher");
+
+                    b.Navigation("Group");
+
+                    b.Navigation("PairSchedule");
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("DigitalPortalAcademy.Models.Staff", b =>
+                {
+                    b.HasOne("DigitalPortalAcademy.Models.User", "User")
+                        .WithMany("Staff")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DigitalPortalAcademy.Models.Student", b =>
                 {
                     b.HasOne("DigitalPortalAcademy.Models.Group", "Group")
@@ -568,8 +808,7 @@ namespace DigitalPortalAcademy.Migrations
                 {
                     b.HasOne("DigitalPortalAcademy.Models.CycleCommission", "CycleCommission")
                         .WithMany("Teachers")
-                        .HasForeignKey("CycleCommissionId")
-                        .HasConstraintName("FK_Teacher_CycleCommission");
+                        .HasForeignKey("CycleCommissionId");
 
                     b.HasOne("DigitalPortalAcademy.Models.User", "User")
                         .WithMany("Teachers")
@@ -579,6 +818,18 @@ namespace DigitalPortalAcademy.Migrations
                     b.Navigation("CycleCommission");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DigitalPortalAcademy.Models.User", b =>
+                {
+                    b.HasOne("DigitalPortalAcademy.Models.Role", "Roles")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_User_Role");
+
+                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("TeacherSubject", b =>
@@ -594,6 +845,11 @@ namespace DigitalPortalAcademy.Migrations
                         .HasForeignKey("TeacherId")
                         .IsRequired()
                         .HasConstraintName("FK_TeacherSubjects_Teacher");
+                });
+
+            modelBuilder.Entity("DigitalPortalAcademy.Models.Building", b =>
+                {
+                    b.Navigation("PairSchedules");
                 });
 
             modelBuilder.Entity("DigitalPortalAcademy.Models.Curator", b =>
@@ -613,7 +869,19 @@ namespace DigitalPortalAcademy.Migrations
 
             modelBuilder.Entity("DigitalPortalAcademy.Models.Group", b =>
                 {
+                    b.Navigation("Schedules");
+
                     b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("DigitalPortalAcademy.Models.PairSchedule", b =>
+                {
+                    b.Navigation("Schedules");
+                });
+
+            modelBuilder.Entity("DigitalPortalAcademy.Models.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("DigitalPortalAcademy.Models.Specialty", b =>
@@ -631,6 +899,13 @@ namespace DigitalPortalAcademy.Migrations
             modelBuilder.Entity("DigitalPortalAcademy.Models.Subject", b =>
                 {
                     b.Navigation("Marks");
+
+                    b.Navigation("Schedules");
+                });
+
+            modelBuilder.Entity("DigitalPortalAcademy.Models.Teacher", b =>
+                {
+                    b.Navigation("Schedules");
                 });
 
             modelBuilder.Entity("DigitalPortalAcademy.Models.User", b =>
@@ -638,6 +913,8 @@ namespace DigitalPortalAcademy.Migrations
                     b.Navigation("Curators");
 
                     b.Navigation("Curricula");
+
+                    b.Navigation("Staff");
 
                     b.Navigation("Students");
 

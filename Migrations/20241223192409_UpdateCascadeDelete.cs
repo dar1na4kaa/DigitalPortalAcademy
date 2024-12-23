@@ -3,14 +3,29 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace DigitalPortalAcademy.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class UpdateCascadeDelete : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Buildings",
+                columns: table => new
+                {
+                    BuildingID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BuildingName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Buildings__B2079BCD98B0068E", x => x.BuildingID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "CycleCommissions",
                 columns: table => new
@@ -38,6 +53,19 @@ namespace DigitalPortalAcademy.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__Departme__B2079BCD98B0068E", x => x.DepartmentID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    RoleID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.RoleID);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,11 +101,32 @@ namespace DigitalPortalAcademy.Migrations
                     UniqueCodeID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UniqueCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    IsUsed = table.Column<bool>(type: "bit", nullable: true, defaultValue: false)
+                    IsUsed = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__UniqueCo__4D0875247BDABA20", x => x.UniqueCodeID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PairSchedules",
+                columns: table => new
+                {
+                    PairScheduleID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BuildingId = table.Column<int>(type: "int", nullable: false),
+                    PairNumber = table.Column<int>(type: "int", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__PairSche__C23C9E9E2454BE2F", x => x.PairScheduleID);
+                    table.ForeignKey(
+                        name: "FK_PairSchedule_Building",
+                        column: x => x.BuildingId,
+                        principalTable: "Buildings",
+                        principalColumn: "BuildingID");
                 });
 
             migrationBuilder.CreateTable(
@@ -86,14 +135,20 @@ namespace DigitalPortalAcademy.Migrations
                 {
                     UserID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PhotoPath = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true, defaultValue: "~/DigitalPortalAcademy.user.jpg"),
+                    PhotoPath = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true, defaultValue: "~/DigitalPortalAcademy.user.jpg"),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__Users__1788CCAC902B8927", x => x.UserID);
+                    table.ForeignKey(
+                        name: "FK_User_Role",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "RoleID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -152,6 +207,28 @@ namespace DigitalPortalAcademy.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Staff",
+                columns: table => new
+                {
+                    StaffId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Staff", x => x.StaffId);
+                    table.ForeignKey(
+                        name: "FK_Staff_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Teachers",
                 columns: table => new
                 {
@@ -168,15 +245,15 @@ namespace DigitalPortalAcademy.Migrations
                 {
                     table.PrimaryKey("PK__Teachers__EDF25944490F7BBF", x => x.TeacherID);
                     table.ForeignKey(
-                        name: "FK_Teacher_CycleCommission",
-                        column: x => x.CycleCommissionId,
-                        principalTable: "CycleCommissions",
-                        principalColumn: "CycleCommissionID");
-                    table.ForeignKey(
                         name: "FK_Teacher_User",
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "UserID");
+                    table.ForeignKey(
+                        name: "FK_Teachers_CycleCommissions_CycleCommissionId",
+                        column: x => x.CycleCommissionId,
+                        principalTable: "CycleCommissions",
+                        principalColumn: "CycleCommissionID");
                 });
 
             migrationBuilder.CreateTable(
@@ -202,7 +279,8 @@ namespace DigitalPortalAcademy.Migrations
                         name: "FK_Group_Specialty",
                         column: x => x.SpecialtyID,
                         principalTable: "Specialties",
-                        principalColumn: "SpecialtyID");
+                        principalColumn: "SpecialtyID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -225,6 +303,52 @@ namespace DigitalPortalAcademy.Migrations
                         column: x => x.TeacherID,
                         principalTable: "Teachers",
                         principalColumn: "TeacherID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Schedules",
+                columns: table => new
+                {
+                    ScheduleID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupID = table.Column<int>(type: "int", nullable: false),
+                    SubjectID = table.Column<int>(type: "int", nullable: false),
+                    TeacherID = table.Column<int>(type: "int", nullable: false),
+                    DayOfWeek = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    PairScheduleID = table.Column<int>(type: "int", nullable: false),
+                    PairScheduleId1 = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Schedules__D40A58A34B7173D4", x => x.ScheduleID);
+                    table.ForeignKey(
+                        name: "FK_Schedule_Group",
+                        column: x => x.GroupID,
+                        principalTable: "Groups",
+                        principalColumn: "GroupID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Schedule_PairSchedule",
+                        column: x => x.PairScheduleID,
+                        principalTable: "PairSchedules",
+                        principalColumn: "PairScheduleID");
+                    table.ForeignKey(
+                        name: "FK_Schedule_Subject",
+                        column: x => x.SubjectID,
+                        principalTable: "Subjects",
+                        principalColumn: "SubjectID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Schedule_Teacher",
+                        column: x => x.TeacherID,
+                        principalTable: "Teachers",
+                        principalColumn: "TeacherID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Schedules_PairSchedules_PairScheduleId1",
+                        column: x => x.PairScheduleId1,
+                        principalTable: "PairSchedules",
+                        principalColumn: "PairScheduleID");
                 });
 
             migrationBuilder.CreateTable(
@@ -287,6 +411,18 @@ namespace DigitalPortalAcademy.Migrations
                         principalColumn: "SubjectID");
                 });
 
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "RoleID", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Администратор" },
+                    { 2, "Студент" },
+                    { 3, "Педагог-организатор" },
+                    { 4, "Сотрудник уч.части" },
+                    { 5, "Преподаватель" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Curators_DepartmentID",
                 table: "Curators",
@@ -328,6 +464,41 @@ namespace DigitalPortalAcademy.Migrations
                 column: "SubjectID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PairSchedules_BuildingId",
+                table: "PairSchedules",
+                column: "BuildingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedules_GroupID",
+                table: "Schedules",
+                column: "GroupID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedules_PairScheduleID",
+                table: "Schedules",
+                column: "PairScheduleID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedules_PairScheduleId1",
+                table: "Schedules",
+                column: "PairScheduleId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedules_SubjectID",
+                table: "Schedules",
+                column: "SubjectID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedules_TeacherID",
+                table: "Schedules",
+                column: "TeacherID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Staff_UserId",
+                table: "Staff",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Students_GroupID",
                 table: "Students",
                 column: "GroupID");
@@ -359,6 +530,11 @@ namespace DigitalPortalAcademy.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_RoleId",
+                table: "Users",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "UQ__Users__A9D105343915BEBC",
                 table: "Users",
                 column: "Email",
@@ -375,6 +551,12 @@ namespace DigitalPortalAcademy.Migrations
                 name: "Marks");
 
             migrationBuilder.DropTable(
+                name: "Schedules");
+
+            migrationBuilder.DropTable(
+                name: "Staff");
+
+            migrationBuilder.DropTable(
                 name: "TeacherSubjects");
 
             migrationBuilder.DropTable(
@@ -384,6 +566,9 @@ namespace DigitalPortalAcademy.Migrations
                 name: "Students");
 
             migrationBuilder.DropTable(
+                name: "PairSchedules");
+
+            migrationBuilder.DropTable(
                 name: "Subjects");
 
             migrationBuilder.DropTable(
@@ -391,6 +576,9 @@ namespace DigitalPortalAcademy.Migrations
 
             migrationBuilder.DropTable(
                 name: "Groups");
+
+            migrationBuilder.DropTable(
+                name: "Buildings");
 
             migrationBuilder.DropTable(
                 name: "CycleCommissions");
@@ -406,6 +594,9 @@ namespace DigitalPortalAcademy.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
         }
     }
 }

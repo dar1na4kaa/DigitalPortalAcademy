@@ -13,7 +13,9 @@ public partial class User
 
     public string PasswordHash { get; set; } = null!;
 
-    public string Role { get; set; } = null!;
+    public int RoleId { get; set; }
+
+    public virtual Role Roles { get; set; }
 
     public virtual ICollection<Curator> Curators { get; set; } = new List<Curator>();
 

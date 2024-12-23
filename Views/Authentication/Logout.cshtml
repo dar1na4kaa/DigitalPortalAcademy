@@ -1,6 +1,7 @@
 ﻿@{
-    ViewData["Title"] = "АТТ Регистрация";
+    ViewData["Title"] = "Регистрация";
 }
+
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="row w-100">
         <div class="col-lg-6 mx-auto">
@@ -8,50 +9,62 @@
             <div class="authorization-card card shadow-lg p-5">
                 <div class="card-body">
                     <h5 class="card-title text-center mb-4">Регистрация</h5>
-                    <form class="form" id="registrationForm">
+
+                    <!-- Сообщения об успехе или ошибке -->
+                    @if (ViewBag.SuccessMessage != null)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @ViewBag.SuccessMessage
+                        </div>
+                    }
+
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    }
+
+                    <form id="registrationForm" method="post">
                         <div class="mb-4">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control form-control-lg" id="email"
-                                   placeholder="Введите email" required>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Введите email" required>
+                            <div class="invalid-feedback">Неверный email</div>
                         </div>
                         <div class="mb-4">
                             <label for="password" class="form-label">Пароль</label>
-                            <input type="password" class="form-control form-control-lg" id="password"
-                                   placeholder="Введите пароль" required>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Введите пароль" required>
+                            <div class="invalid-feedback">Пароль должен быть не менее 8 символов</div>
                         </div>
                         <div class="mb-4">
-                            <label for="confirmPassword" class="form-label">Повторите пароль</label>
-                            <input type="password" class="form-control form-control-lg" id="confirmPassword"
-                                   placeholder="Повторите пароль" required>
+                            <label for="confirmPassword" class="form-label">Подтверждение пароля</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Подтвердите пароль" required>
+                            <div class="invalid-feedback">Пароли не совпадают</div>
                         </div>
                         <div class="mb-4">
-                            <label for="fullName" class="form-label">ФИО</label>
-                            <input type="text" class="form-control form-control-lg" id="fullName"
-                                   placeholder="Введите ваше ФИО" required>
+                            <label for="fullName" class="form-label">Полное имя</label>
+                            <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Введите полное имя" required>
+                            <div class="invalid-feedback">Введите ваше полное имя (например, имя и фамилия)</div>
                         </div>
                         <div class="mb-4">
                             <label for="uniqueCode" class="form-label">Уникальный код</label>
-                            <input type="text" class="form-control form-control-lg" id="uniqueCode"
-                                   placeholder="Введите уникальный код" required>
+                            <input type="text" class="form-control" id="uniqueCode" name="uniqueCode" placeholder="Введите уникальный код" required>
+                            <div class="invalid-feedback">Введите уникальный код</div>
                         </div>
                         <div class="mb-4">
                             <label for="role" class="form-label">Роль</label>
-                            <select class="form-select form-select-lg" id="role" required>
-                                <option value="" disabled selected>Выберите вашу роль</option>
-                                <option value="Student">Студент</option>
-                                <option value="Teacher">Преподаватель</option>
-                                <option value="Admin">Администратор</option>
+                            <select class="form-control" id="role" name="role" required>
+                                <option value="">Выберите роль</option>
+                                <option value="admin">Администратор</option>
+                                <option value="user">Пользователь</option>
                             </select>
+                            <div class="invalid-feedback">Выберите роль</div>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100 btn-lg">
-                            Зарегистрироваться
-                        </button>
+                        <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
                     </form>
-                    <div class="sign-in-link text-center mt-3">
-                        <p class="mb-0">
-                            Уже есть аккаунт? <a href="/Home/Login"
-                                                 class="text-decoration-none">Войти</a>
-                        </p>
+
+                    <div class="sign-up-link text-center mt-3">
+                        <p class="mb-0">Есть аккаунт? <a href="/Home/Login" class="text-decoration-none">Войти</a></p>
                     </div>
                 </div>
             </div>

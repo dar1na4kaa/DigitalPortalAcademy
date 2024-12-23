@@ -1,6 +1,4 @@
-using DigitalPortalAcademy.Models;
 using DigitalPortalAcademy.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalPortalAcademy.Controllers
@@ -31,10 +29,9 @@ namespace DigitalPortalAcademy.Controllers
             }
             HttpContext.Session.SetString("UserId", user.UserId.ToString());
             HttpContext.Session.SetString("UserEmail", user.Email);
-            HttpContext.Session.SetString("UserRole", user.Role); // Предполагается, что у пользователя есть свойство Role
+            HttpContext.Session.SetString("UserRole", user.Roles.Name);
 
-            // Перенаправляем в зависимости от роли
-            return user.Role switch
+            return user.Roles.Name switch
             {
                 "Администратор" => RedirectToAction("Index", "Administrator"),
                 "Преподаватель" => RedirectToAction("UserDashboard", "User"),
@@ -46,28 +43,30 @@ namespace DigitalPortalAcademy.Controllers
         {
             return View();
         }
-        /*        [HttpPost]
-        */
-        [HttpPost]
-        public async Task<IActionResult> Logout(string email, string password, string confirmPassword, string fullName, string uniqueCode, string role)
-        {
-            if (password != confirmPassword)
-            {
-                ViewBag.ErrorMessage = "Пароли не совпадают!";
-                return View();
-            }
 
+        [HttpPost]
+        public async Task<IActionResult> Logout(string email, string password,string fullName, string uniqueCode, string role)
+        {
             try
             {
                 var newUser = await _userAccountService.RegisterUserAsync(email, password, role, fullName, uniqueCode);
-                return RedirectToAction("Login", "Home");
+                if (newUser != null)
+                {
+                    ViewBag.SuccessMessage = "Регистрация прошла успешно!";
+                    return RedirectToAction("Login", "Home");
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Ошибка при регистрации";
+                    return View();
+                }
             }
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = ex.Message;
                 return View();
             }
-        }
 
+        }
     }
 }
