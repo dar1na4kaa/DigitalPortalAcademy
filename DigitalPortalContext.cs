@@ -1,5 +1,6 @@
 ﻿using DigitalPortalAcademy.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DigitalPortalAcademy
 {
@@ -25,10 +26,11 @@ namespace DigitalPortalAcademy
         public virtual DbSet<UniqueCode> UniqueCodes { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Staff> Staff { get; set; }
+        public virtual DbSet<Admin> Admins { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseSqlServer("Server=DESKTOP-6QHTSJ1;Database=DigitalPortal;Trusted_Connection=True;TrustServerCertificate=True;");
-
+            => optionsBuilder.UseSqlServer("Server=510EC16;Database=DigitalPortal;Trusted_Connection=True;Encrypt = true;TrustServerCertificate = true;");
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Role>().HasData(
@@ -38,6 +40,23 @@ namespace DigitalPortalAcademy
                 new Role { RoleId = 4, Name = "Сотрудник уч.части" },
                 new Role { RoleId = 5, Name = "Преподаватель" }
             );
+            modelBuilder.Entity<Admin>().HasData(
+                new Admin { AdminId = 1, FirstName = "Иван",LastName = "Иванов",MiddleName = "Иванович",Phone="+79502522740" },
+                new Admin { AdminId = 2, FirstName = "Петр", LastName = "Петров", MiddleName = "Петрович", Phone = "+7996253945" },
+                new Admin { AdminId = 3, FirstName = "Сергей", LastName = "Сергеев", MiddleName = "Сергеевич", Phone = "+7996203648" }
+            );
+            modelBuilder.Entity<Admin>(entity =>
+            {
+                entity.HasKey(a => a.AdminId);
+                entity.Property(e => e.FirstName).HasMaxLength(100);
+                entity.Property(e => e.LastName).HasMaxLength(100);
+                entity.Property(e => e.MiddleName).HasMaxLength(100);
+                entity.Property(e => e.Phone).HasMaxLength(20);
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+                entity.HasOne(d => d.User).WithMany(p => p.Admins)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Admin_User");
+            });
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.HasKey(e => e.RoleId);

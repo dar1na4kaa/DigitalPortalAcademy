@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigitalPortalAcademy.Migrations
 {
     [DbContext(typeof(DigitalPortalContext))]
-    [Migration("20241223192409_UpdateCascadeDelete")]
-    partial class UpdateCascadeDelete
+    [Migration("20241224122410_newDb")]
+    partial class newDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -579,9 +579,6 @@ namespace DigitalPortalAcademy.Migrations
                         .HasColumnName("UniqueCodeID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UniqueCodeId"));
-
-                    b.Property<bool?>("IsUsed")
-                        .HasColumnType("bit");
 
                     b.Property<string>("UniqueCodeName")
                         .IsRequired()

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DigitalPortalAcademy.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateCascadeDelete : Migration
+    public partial class newDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -100,8 +100,7 @@ namespace DigitalPortalAcademy.Migrations
                 {
                     UniqueCodeID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UniqueCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    IsUsed = table.Column<bool>(type: "bit", nullable: true)
+                    UniqueCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
