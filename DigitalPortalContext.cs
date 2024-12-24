@@ -25,6 +25,7 @@ namespace DigitalPortalAcademy
         public virtual DbSet<UniqueCode> UniqueCodes { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Staff> Staff { get; set; }
+        public virtual DbSet<Admin> Admins { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseSqlServer("Server=DESKTOP-6QHTSJ1;Database=DigitalPortal;Trusted_Connection=True;TrustServerCertificate=True;");
