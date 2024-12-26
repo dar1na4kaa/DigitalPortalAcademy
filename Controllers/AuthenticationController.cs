@@ -6,9 +6,9 @@ namespace DigitalPortalAcademy.Controllers
     public class AuthenticationController : Controller
     {
         private readonly UserAccountService _userAccountService;
-        private readonly Services.AuthenticationService _authenticationService;
+        private readonly AuthenticationService _authenticationService;
 
-        public AuthenticationController(UserAccountService userAccountService, Services.AuthenticationService authenticationService)
+        public AuthenticationController(UserAccountService userAccountService, AuthenticationService authenticationService)
         {
             _userAccountService = userAccountService;
             _authenticationService = authenticationService;

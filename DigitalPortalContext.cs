@@ -1,4 +1,5 @@
 ﻿using DigitalPortalAcademy.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DigitalPortalAcademy
@@ -28,7 +29,14 @@ namespace DigitalPortalAcademy
         public virtual DbSet<Admin> Admins { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseSqlServer("Server=DESKTOP-6QHTSJ1;Database=DigitalPortal;Trusted_Connection=True;TrustServerCertificate=True;");
+        {
+            optionsBuilder
+                .UseSqlServer("Server=DESKTOP-6QHTSJ1;Database=DigitalPortal;Trusted_Connection=True;TrustServerCertificate=True;")
+                .EnableSensitiveDataLogging(); 
+
+        }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,6 +47,48 @@ namespace DigitalPortalAcademy
                 new Role { RoleId = 4, Name = "Сотрудник уч.части" },
                 new Role { RoleId = 5, Name = "Преподаватель" }
             );
+            modelBuilder.Entity<Admin>().HasData(
+                new Admin { AdminId = 1, FirstName = "Иван", LastName = "Иванов", MiddleName = "Иванович", Phone = "+79502522740" },
+                new Admin { AdminId = 2, FirstName = "Петр", LastName = "Петров", MiddleName = "Петрович", Phone = "+7996253945" },
+                new Admin { AdminId = 3, FirstName = "Сергей", LastName = "Сергеев", MiddleName = "Сергеевич", Phone = "+7996203648" }
+            );
+
+            var passwordHasher = new PasswordHasher<User>();
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    UserId = 1,
+                    Email = "ivan.ivanov@example.com",
+                    PasswordHash = passwordHasher.HashPassword(null, "1234admin"), // Хэш пароля
+                    RoleId = 1,
+                },
+                new User
+                {
+                    UserId = 2,
+                    Email = "petr.petrov@example.com",
+                    PasswordHash = passwordHasher.HashPassword(null, "5678admin"), // Хэш пароля
+                    RoleId = 1,
+                },
+                new User
+                {
+                    UserId = 3,
+                    Email = "sergey.sergeev@example.com",
+                    PasswordHash = passwordHasher.HashPassword(null, "9012admin"), // Хэш пароля
+                    RoleId = 1,
+                }
+            );
+            modelBuilder.Entity<Admin>(entity =>
+            {
+                entity.HasKey(a => a.AdminId);
+                entity.Property(e => e.FirstName).HasMaxLength(100);
+                entity.Property(e => e.LastName).HasMaxLength(100);
+                entity.Property(e => e.MiddleName).HasMaxLength(100);
+                entity.Property(e => e.Phone).HasMaxLength(20);
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+                entity.HasOne(d => d.User).WithMany(p => p.Admins)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Admin_User");
+            });
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.HasKey(e => e.RoleId);
@@ -248,69 +298,70 @@ namespace DigitalPortalAcademy
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
                 entity.Property(e => e.Email).HasMaxLength(100);
-                entity.Property(e => e.PasswordHash).HasMaxLength(255);
+                entity.Property(e => e.PasswordHash).HasMaxLength(500);
                 entity.Property(e => e.PhotoPath)
                     .HasMaxLength(200)
                     .HasDefaultValue("~/DigitalPortalAcademy.user.jpg");
                 entity.HasOne(d => d.Roles)
                     .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.RoleId) 
+                    .HasForeignKey(d => d.RoleId)
                     .HasConstraintName("FK_User_Role");
             });
 
             modelBuilder.Entity<Schedule>(entity =>
-                {
-                    entity.HasKey(e => e.ScheduleId).HasName("PK__Schedules__D40A58A34B7173D4");
+            {
+                entity.HasKey(e => e.ScheduleId).HasName("PK__Schedules__D40A58A34B7173D4");
 
-                    entity.Property(e => e.ScheduleId).HasColumnName("ScheduleID");
-                    entity.Property(e => e.DayOfWeek).HasMaxLength(20);
-                    entity.Property(e => e.PairScheduleId).HasColumnName("PairScheduleID");
-                    entity.Property(e => e.SubjectId).HasColumnName("SubjectID");
-                    entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
-                    entity.Property(e => e.GroupId).HasColumnName("GroupID");
+                entity.Property(e => e.ScheduleId).HasColumnName("ScheduleID");
+                entity.Property(e => e.DayOfWeek).HasMaxLength(20);
+                entity.Property(e => e.PairScheduleId).HasColumnName("PairScheduleID");
+                entity.Property(e => e.SubjectId).HasColumnName("SubjectID");
+                entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
+                entity.Property(e => e.GroupId).HasColumnName("GroupID");
 
-                    entity.HasOne(d => d.Subject).WithMany(p => p.Schedules)
-                        .HasForeignKey(d => d.SubjectId)
-                        .HasConstraintName("FK_Schedule_Subject");
+                entity.HasOne(d => d.Subject).WithMany(p => p.Schedules)
+                    .HasForeignKey(d => d.SubjectId)
+                    .HasConstraintName("FK_Schedule_Subject");
 
-                    entity.HasOne(d => d.Teacher).WithMany(p => p.Schedules)
-                        .HasForeignKey(d => d.TeacherId)
-                        .HasConstraintName("FK_Schedule_Teacher");
+                entity.HasOne(d => d.Teacher).WithMany(p => p.Schedules)
+                    .HasForeignKey(d => d.TeacherId)
+                    .HasConstraintName("FK_Schedule_Teacher");
 
-                    entity.HasOne(d => d.Group).WithMany(p => p.Schedules)
-                        .HasForeignKey(d => d.GroupId)
-                        .HasConstraintName("FK_Schedule_Group");
+                entity.HasOne(d => d.Group).WithMany(p => p.Schedules)
+                    .HasForeignKey(d => d.GroupId)
+                    .HasConstraintName("FK_Schedule_Group");
 
-                    entity.HasOne(d => d.PairSchedule).WithMany()
-                        .HasForeignKey(d => d.PairScheduleId)
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_Schedule_PairSchedule");
-                });
+                entity.HasOne(d => d.PairSchedule).WithMany()
+                    .HasForeignKey(d => d.PairScheduleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Schedule_PairSchedule");
+            });
 
-                modelBuilder.Entity<Building>(entity =>
-                {
-                    entity.HasKey(e => e.BuildingId).HasName("PK__Buildings__B2079BCD98B0068E");
+            modelBuilder.Entity<Building>(entity =>
+            {
+                entity.HasKey(e => e.BuildingId).HasName("PK__Buildings__B2079BCD98B0068E");
 
-                    entity.Property(e => e.BuildingId).HasColumnName("BuildingID");
-                    entity.Property(e => e.BuildingName).HasMaxLength(100);
-                });
+                entity.Property(e => e.BuildingId).HasColumnName("BuildingID");
+                entity.Property(e => e.BuildingName).HasMaxLength(100);
+            });
 
-                modelBuilder.Entity<PairSchedule>(entity =>
-                {
-                    entity.HasKey(e => e.PairScheduleId).HasName("PK__PairSche__C23C9E9E2454BE2F");
+            modelBuilder.Entity<PairSchedule>(entity =>
+            {
+                entity.HasKey(e => e.PairScheduleId).HasName("PK__PairSche__C23C9E9E2454BE2F");
 
-                    entity.Property(e => e.PairScheduleId).HasColumnName("PairScheduleID");
-                    entity.Property(e => e.PairNumber).HasColumnName("PairNumber");
-                    entity.Property(e => e.StartTime).HasColumnType("datetime");
-                    entity.Property(e => e.EndTime).HasColumnType("datetime");
+                entity.Property(e => e.PairScheduleId).HasColumnName("PairScheduleID");
+                entity.Property(e => e.PairNumber).HasColumnName("PairNumber");
+                entity.Property(e => e.StartTime).HasColumnType("datetime");
+                entity.Property(e => e.EndTime).HasColumnType("datetime");
 
-                    entity.HasOne(d => d.Building).WithMany(p => p.PairSchedules)
-                        .HasForeignKey(d => d.BuildingId)
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_PairSchedule_Building");
-                });
-                OnModelCreatingPartial(modelBuilder);
+                entity.HasOne(d => d.Building).WithMany(p => p.PairSchedules)
+                    .HasForeignKey(d => d.BuildingId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PairSchedule_Building");
+            });
+            OnModelCreatingPartial(modelBuilder);
         }
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
+

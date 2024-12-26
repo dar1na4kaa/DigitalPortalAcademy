@@ -1,5 +1,6 @@
 using DigitalPortalAcademy;
 using DigitalPortalAcademy.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,5 +40,4 @@ app.UseRouting();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Authentication}/{action=Login}/{id?}");
-
 app.Run();
