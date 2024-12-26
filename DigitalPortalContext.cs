@@ -31,50 +31,13 @@ namespace DigitalPortalAcademy
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseSqlServer("Server=DESKTOP-6QHTSJ1;Database=DigitalPortal;Trusted_Connection=True;");
+                .UseSqlServer("Server=DESKTOP-6QHTSJ1;Database=DigitalPortal;Trusted_Connection=True;Encrypt = true;TrustServerCertificate = true");
         }
 
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Role>().HasData(
-                new Role { RoleId = 1, Name = "Администратор" },
-                new Role { RoleId = 2, Name = "Студент" },
-                new Role { RoleId = 3, Name = "Педагог-организатор" },
-                new Role { RoleId = 4, Name = "Сотрудник уч.части" },
-                new Role { RoleId = 5, Name = "Преподаватель" }
-            );
-            modelBuilder.Entity<Admin>().HasData(
-                new Admin { AdminId = 1, FirstName = "Иван", LastName = "Иванов", MiddleName = "Иванович", Phone = "+79502522740" },
-                new Admin { AdminId = 2, FirstName = "Петр", LastName = "Петров", MiddleName = "Петрович", Phone = "+7996253945" },
-                new Admin { AdminId = 3, FirstName = "Сергей", LastName = "Сергеев", MiddleName = "Сергеевич", Phone = "+7996203648" }
-            );
-
-            var passwordHasher = new PasswordHasher<User>();
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    UserId = 1,
-                    Email = "ivan.ivanov@example.com",
-                    PasswordHash = passwordHasher.HashPassword(null, "1234admin"), // Хэш пароля
-                    RoleId = 1,
-                },
-                new User
-                {
-                    UserId = 2,
-                    Email = "petr.petrov@example.com",
-                    PasswordHash = passwordHasher.HashPassword(null, "5678admin"), // Хэш пароля
-                    RoleId = 1,
-                },
-                new User
-                {
-                    UserId = 3,
-                    Email = "sergey.sergeev@example.com",
-                    PasswordHash = passwordHasher.HashPassword(null, "9012admin"), // Хэш пароля
-                    RoleId = 1,
-                }
-            );
             modelBuilder.Entity<Admin>(entity =>
             {
                 entity.HasKey(a => a.AdminId);

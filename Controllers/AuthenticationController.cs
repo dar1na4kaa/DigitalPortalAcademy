@@ -1,4 +1,6 @@
+using DigitalPortalAcademy.Models;
 using DigitalPortalAcademy.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalPortalAcademy.Controllers
@@ -15,6 +17,12 @@ namespace DigitalPortalAcademy.Controllers
         }
         public IActionResult Login()
         {
+            var passwordHasher = new PasswordHasher<User>();
+            var hash = passwordHasher.HashPassword(null, "5678admin");
+            var hash1 = passwordHasher.HashPassword(null, "9012admin");
+            Console.WriteLine(hash);
+            Console.WriteLine(hash1);
+
             return View();
         }
         [HttpPost]
@@ -47,6 +55,7 @@ namespace DigitalPortalAcademy.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout(string email, string password,string fullName, string uniqueCode, string role)
         {
+
             try
             {
                 var newUser = await _userAccountService.RegisterUserAsync(email, password, role, fullName, uniqueCode);
