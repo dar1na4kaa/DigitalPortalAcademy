@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigitalPortalAcademy.Models;
 
 public partial class Subject
 {
+    [Key]
+    [Column("SubjectID")]
     public int SubjectId { get; set; }
 
+    [StringLength(100)]
     public string SubjectName { get; set; } = null!;
 
-    public virtual ICollection<Mark> Marks { get; set; } = new List<Mark>();
-
-    public virtual ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
-    public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
-
+    [InverseProperty("Subject")]
+    public virtual ICollection<TeacherSubject> TeacherSubjects { get; set; } = new List<TeacherSubject>();
 }

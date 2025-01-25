@@ -1,17 +1,49 @@
-﻿namespace DigitalPortalAcademy.Models
-{
-    public class Schedule
-    {
-        public int ScheduleId { get; set; }
-        public int GroupId { get; set; }
-        public int SubjectId { get; set; }
-        public int TeacherId { get; set; }
-        public string DayOfWeek { get; set; }
-        public int PairScheduleId { get; set; }
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-        public virtual Group Group { get; set; }
-        public virtual Subject Subject { get; set; }
-        public virtual Teacher Teacher { get; set; }
-        public virtual PairSchedule PairSchedule { get; set; } 
-    }
+namespace DigitalPortalAcademy.Models;
+
+public partial class Schedule
+{
+    [Key]
+    [Column("ScheduleID")]
+    public int ScheduleId { get; set; }
+
+    [Column("PairID")]
+    public int PairId { get; set; }
+
+    [Column("RoomID")]
+    public int RoomId { get; set; }
+
+    [Column("DayID")]
+    public int DayId { get; set; }
+
+    [Column("TimeSlotID")]
+    public int TimeSlotId { get; set; }
+
+    [Column("ClassTypeID")]
+    public int ClassTypeId { get; set; }
+
+    [ForeignKey("ClassTypeId")]
+    [InverseProperty("Schedules")]
+    public virtual ClassType ClassType { get; set; } = null!;
+
+    [ForeignKey("DayId")]
+    [InverseProperty("Schedules")]
+    public virtual Day Day { get; set; } = null!;
+
+    [ForeignKey("PairId")]
+    [InverseProperty("Schedules")]
+    public virtual Pair Pair { get; set; } = null!;
+
+    [ForeignKey("RoomId")]
+    [InverseProperty("Schedules")]
+    public virtual Room Room { get; set; } = null!;
+
+    [ForeignKey("TimeSlotId")]
+    [InverseProperty("Schedules")]
+    public virtual TimeSlot TimeSlot { get; set; } = null!;
 }

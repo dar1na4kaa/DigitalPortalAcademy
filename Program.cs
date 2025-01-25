@@ -6,11 +6,10 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Регистрация вашего сервиса в DI-контейнере
+
 builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddScoped<UserAccountService>();
+builder.Services.AddScoped<RegistrationService>();
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<DigitalPortalContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddSession(options =>
 {
@@ -18,6 +17,8 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;                // Защита от JavaScript-доступа
     options.Cookie.IsEssential = true;             // Обязательно для работы
 });
+builder.Services.AddDbContext<AcademyContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
@@ -39,5 +40,5 @@ app.UseStaticFiles();
 app.UseRouting();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Authentication}/{action=Login}/{id?}");
+    pattern: "{controller=Administrator}/{action=Index}/{id?}");
 app.Run();

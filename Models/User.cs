@@ -1,30 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigitalPortalAcademy.Models;
 
+[Index("Login", Name = "UQ__Users__5E55825B45A1EFB3", IsUnique = true)]
 public partial class User
 {
+    [Key]
+    [Column("UserID")]
     public int UserId { get; set; }
 
+    [StringLength(255)]
     public string? PhotoPath { get; set; }
 
-    public string Email { get; set; } = null!;
+    [StringLength(100)]
+    public string Login { get; set; } = null!;
 
+    [StringLength(255)]
     public string PasswordHash { get; set; } = null!;
 
     public int RoleId { get; set; }
 
-    public virtual Role Roles { get; set; } = null!;
+    [Column(TypeName = "datetime")]
+    public DateTime? CreatedAt { get; set; }
 
-    public virtual ICollection<Curator> Curators { get; set; } = new List<Curator>();
+    [InverseProperty("Author")]
+    public virtual ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
 
-    public virtual ICollection<Curriculum> Curricula { get; set; } = new List<Curriculum>();
+    [InverseProperty("User")]
+    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 
+    [ForeignKey("RoleId")]
+    [InverseProperty("Users")]
+    public virtual Role Role { get; set; } = null!;
+
+    [InverseProperty("User")]
     public virtual ICollection<Student> Students { get; set; } = new List<Student>();
 
+    [InverseProperty("User")]
     public virtual ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
-    public virtual ICollection<Staff> Staff { get; set; } = new List<Staff>();
-    public virtual ICollection<Admin> Admins { get; set; } = new List<Admin>();
-
 }

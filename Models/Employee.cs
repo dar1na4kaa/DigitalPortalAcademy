@@ -6,20 +6,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DigitalPortalAcademy.Models;
 
-[Index("Email", Name = "UQ__Teachers__A9D10534231CCD58", IsUnique = true)]
-[Index("PersonnelNumber", Name = "UQ__Teachers__EC6A9E5C1A09CCDB", IsUnique = true)]
-public partial class Teacher
+[Table("Employee")]
+[Index("PersonnelNumber", Name = "UQ__Employee__EC6A9E5CB58100A9", IsUnique = true)]
+public partial class Employee
 {
     [Key]
-    public int TeacherId { get; set; }
+    [Column("EmployeeID")]
+    public int EmployeeId { get; set; }
 
     public long PersonnelNumber { get; set; }
 
     [Column("UserID")]
     public int? UserId { get; set; }
 
-    [StringLength(100)]
-    public string Email { get; set; } = null!;
+    [Column("PositionID")]
+    public int PositionId { get; set; }
 
     [StringLength(100)]
     public string FirstName { get; set; } = null!;
@@ -33,16 +34,14 @@ public partial class Teacher
     [StringLength(20)]
     public string Phone { get; set; } = null!;
 
-    public int? CycleCommissionId { get; set; }
+    [InverseProperty("Curator")]
+    public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
 
-    [ForeignKey("CycleCommissionId")]
-    [InverseProperty("Teachers")]
-    public virtual CycleCommission? CycleCommission { get; set; }
-
-    [InverseProperty("Teacher")]
-    public virtual ICollection<TeacherSubject> TeacherSubjects { get; set; } = new List<TeacherSubject>();
+    [ForeignKey("PositionId")]
+    [InverseProperty("Employees")]
+    public virtual Position Position { get; set; } = null!;
 
     [ForeignKey("UserId")]
-    [InverseProperty("Teachers")]
+    [InverseProperty("Employees")]
     public virtual User? User { get; set; }
 }

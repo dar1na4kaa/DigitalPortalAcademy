@@ -1,21 +1,32 @@
 ﻿using DigitalPortalAcademy.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigitalPortalAcademy.Services
 {
     public class AuthenticationService
     {
-        private readonly PasswordHasher<User> _passwordHasher = new PasswordHasher<User>();
-
-        public string HashPassword(User user, string password)
+        private readonly AcademyContext _context;
+        public AuthenticationService(AcademyContext context)
         {
-            return _passwordHasher.HashPassword(user, password);
+            _context = context;
         }
+        public Task<User?> GetUserByEmailAsync(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentException("Email не может быть пустым или содержать только пробелы.", nameof(email));
+            }
 
+            return _context.Users
+                .Include(u => u.Role) // Если нужно включить связанную таблицу ролей
+                .FirstOrDefaultAsync(u => u.Login == email);
+        }
         public bool VerifyPassword(User user, string enteredPassword)
         {
-            var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, enteredPassword);
-            return result == PasswordVerificationResult.Success;
+            string hashedPassword = PasswordHasher.HashPassword(enteredPassword);
+            bool result = hashedPassword.Equals(user.PasswordHash);
+            return result;
         }
     }
 }

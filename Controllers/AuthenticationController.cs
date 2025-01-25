@@ -7,58 +7,52 @@ namespace DigitalPortalAcademy.Controllers
 {
     public class AuthenticationController : Controller
     {
-        private readonly UserAccountService _userAccountService;
+        private readonly RegistrationService _registrationService;
         private readonly AuthenticationService _authenticationService;
 
-        public AuthenticationController(UserAccountService userAccountService, AuthenticationService authenticationService)
+        public AuthenticationController(RegistrationService registrationService, AuthenticationService authenticationService)
         {
-            _userAccountService = userAccountService;
+            _registrationService = registrationService;
             _authenticationService = authenticationService;
         }
         public IActionResult Login()
         {
-            var passwordHasher = new PasswordHasher<User>();
-            var hash = passwordHasher.HashPassword(null, "5678admin");
-            var hash1 = passwordHasher.HashPassword(null, "9012admin");
-            Console.WriteLine(hash);
-            Console.WriteLine(hash1);
-
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
-            var user = await _userAccountService.GetUserByEmailAsync(email);
+            var user = await _authenticationService.GetUserByEmailAsync(email);
 
             if (user == null || !_authenticationService.VerifyPassword(user, password))
             {
                 ViewBag.ErrorMessage = "Неверный email или пароль!";
                 return View();
             }
-            HttpContext.Session.SetString("UserId", user.UserId.ToString());
-            HttpContext.Session.SetString("UserEmail", user.Email);
-            HttpContext.Session.SetString("UserRole", user.Roles.Name);
 
-            return user.Roles.Name switch
-            {
-                "Администратор" => RedirectToAction("Index", "Administrator"),
-                "Преподаватель" => RedirectToAction("UserDashboard", "User"),
-                _ => RedirectToAction("AccessDenied", "Home") 
-            };
+            HttpContext.Session.SetString("UserId", user.UserId.ToString());
+            HttpContext.Session.SetString("UserEmail", user.Login);
+            HttpContext.Session.SetString("UserRole", user.Role.Name);
+
+            Console.WriteLine("UserId: " + HttpContext.Session.GetString("UserId"));
+            Console.WriteLine("UserEmail: " + HttpContext.Session.GetString("UserEmail"));
+            Console.WriteLine("UserRole: " + HttpContext.Session.GetString("UserRole"));
+
+            return await RolesService.GetActionByRole(this, user);
         }
 
-        public IActionResult Logout()
+
+        public IActionResult SignUp()
         {
             return View();
         }
-
         [HttpPost]
-        public async Task<IActionResult> Logout(string email, string password,string fullName, string uniqueCode, string role)
+        public async Task<IActionResult> SignUp(string email, string password, string fullName, string uniqueCode, string role)
         {
 
             try
             {
-                var newUser = await _userAccountService.RegisterUserAsync(email, password, role, fullName, uniqueCode);
+                var newUser = await _registrationService.RegisterUserAsync(email, password, role, fullName, uniqueCode);
                 if (newUser != null)
                 {
                     ViewBag.SuccessMessage = "Регистрация прошла успешно!";
