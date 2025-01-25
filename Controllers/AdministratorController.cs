@@ -5,9 +5,6 @@ namespace DigitalPortalAcademy.Controllers
 {
     public class AdministratorController : Controller
     {
-        public AdministratorController(RegistrationService registrationService, AuthenticationService authenticationService)
-        {
-        }
         public IActionResult Index()
         {
             Console.WriteLine("Index action in AdministratorController called");
