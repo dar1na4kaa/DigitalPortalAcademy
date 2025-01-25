@@ -9,7 +9,7 @@ namespace DigitalPortalAcademy.Controllers
         {
             Console.WriteLine("Index action in AdministratorController called");
 
-            return View(); // Это будет искать файл /Views/Administrator/Index.cshtml
+            return View();
         }
     }
 }
