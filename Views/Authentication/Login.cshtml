@@ -10,7 +10,6 @@
                 <div class="card-body">
                     <h5 class="card-title text-center mb-4">Авторизация</h5>
 
-                    <!-- Выводим ошибку, если она есть -->
                     @if (ViewBag.ErrorMessage != null)
                     {
                         <div class="alert alert-danger" role="alert">
@@ -21,25 +20,20 @@
                     <form class="form" id="loginForm" method="post">
                         <div class="mb-4">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control
-                                   @if (ViewBag.ErrorMessage != null) {
-                            <text>Неверный email</text>
-                            }" id="email" name="email" placeholder="Введите email" required >
+                            <input type="email" class="form-control"
+                             id="email" name="email" placeholder="Введите email" required >
                         </div>
                         <div class="mb-4">
                             <label for="password" class="form-label">Пароль</label>
-                            <input type="password" class="form-control
-                                   @if (ViewBag.ErrorMessage != null) {
-                            <text>Неверный пароль</text>
-                            }"
-                            id="password" name="password" placeholder="Введите пароль" required >
+                            <input type="password" class="form-control"
+                                id="password" name="password" placeholder="Введите пароль" required >
                         </div>
                         <a href="#" class="text-decoration-none d-block mb-3">Забыли пароль?</a>
                         <button type="submit" class="btn btn-primary w-100">Войти</button>
                     </form>
 
                     <div class="sign-up-link text-center mt-3">
-                        <p class="mb-0">Нет аккаунта? <a href="/Home/Logout" class="text-decoration-none">Зарегистрироваться</a></p>
+                        <p class="mb-0">Нет аккаунта? <a href="/Authentication/SignUp" class="text-decoration-none">Зарегистрироваться</a></p>
                     </div>
                 </div>
             </div>

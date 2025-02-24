@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Регистрация вашего сервиса в DI-контейнере
 
 builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddScoped<RegistrationService>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession(options =>
@@ -36,8 +35,10 @@ else
     app.UseHsts();
 }
 app.UseHttpsRedirection();
+app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseRouting();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Authentication}/{action=Login}/{id?}");

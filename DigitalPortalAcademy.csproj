@@ -8,16 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Administrator\index.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="wwwroot\lib\img\files\curriculum-path\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Administrator\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

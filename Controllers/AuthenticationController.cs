@@ -7,22 +7,22 @@ namespace DigitalPortalAcademy.Controllers
 {
     public class AuthenticationController : Controller
     {
-        private readonly RegistrationService _registrationService;
         private readonly AuthenticationService _authenticationService;
 
-        public AuthenticationController(RegistrationService registrationService, AuthenticationService authenticationService)
+        public AuthenticationController(AuthenticationService authenticationService)
         {
-            _registrationService = registrationService;
             _authenticationService = authenticationService;
         }
+
         public IActionResult Login()
         {
             return View();
         }
+
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
+        public IActionResult Login(string email, string password)
         {
-            var user = await _authenticationService.GetUserByEmailAsync(email);
+            var user = _authenticationService.GetUserByEmail(email);
 
             if (user == null || !_authenticationService.VerifyPassword(user, password))
             {
@@ -38,21 +38,21 @@ namespace DigitalPortalAcademy.Controllers
             Console.WriteLine("UserEmail: " + HttpContext.Session.GetString("UserEmail"));
             Console.WriteLine("UserRole: " + HttpContext.Session.GetString("UserRole"));
 
-            return await RolesService.GetActionByRole(this, user);
+            return RoleRedirectService.GetActionByRole(this, user);
         }
-
 
         public IActionResult SignUp()
         {
             return View();
         }
-        [HttpPost]
-        public async Task<IActionResult> SignUp(string email, string password, string fullName, string uniqueCode, string role)
-        {
 
+        [HttpPost]
+        public IActionResult SignUp(string email, string password, string fullName, string uniqueCode, string role)
+        {
             try
             {
-                var newUser = await _registrationService.RegisterUserAsync(email, password, role, fullName, uniqueCode);
+                var newUser = _authenticationService.RegisterUser(email, password, role, fullName, uniqueCode); // Синхронный вызов
+
                 if (newUser != null)
                 {
                     ViewBag.SuccessMessage = "Регистрация прошла успешно!";
@@ -69,7 +69,6 @@ namespace DigitalPortalAcademy.Controllers
                 ViewBag.ErrorMessage = ex.Message;
                 return View();
             }
-
         }
     }
 }
