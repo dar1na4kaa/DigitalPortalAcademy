@@ -6,20 +6,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DigitalPortalAcademy.Models;
 
-[Index("Email", Name = "UQ__Teachers__A9D10534231CCD58", IsUnique = true)]
+[Index("WorkEmail", Name = "UQ__Teachers__A9D10534231CCD58", IsUnique = true)]
 [Index("PersonnelNumber", Name = "UQ__Teachers__EC6A9E5C1A09CCDB", IsUnique = true)]
 public partial class Teacher
 {
     [Key]
     public int TeacherId { get; set; }
 
-    public long PersonnelNumber { get; set; }
+    [StringLength(15)]
+    public string PersonnelNumber { get; set; } = null!;
 
     [Column("UserID")]
     public int? UserId { get; set; }
-
-    [StringLength(100)]
-    public string Email { get; set; } = null!;
 
     [StringLength(100)]
     public string FirstName { get; set; } = null!;
@@ -29,6 +27,9 @@ public partial class Teacher
 
     [StringLength(100)]
     public string? MiddleName { get; set; }
+
+    [StringLength(100)]
+    public string WorkEmail { get; set; } = null!;
 
     [StringLength(20)]
     public string Phone { get; set; } = null!;

@@ -8,13 +8,14 @@ namespace DigitalPortalAcademy.Models;
 
 [Table("Employee")]
 [Index("PersonnelNumber", Name = "UQ__Employee__EC6A9E5CB58100A9", IsUnique = true)]
+[Index("WorkEmail", Name = "UQ__Employee_A9D10534231CCD59", IsUnique = true)]
 public partial class Employee
 {
     [Key]
     [Column("EmployeeID")]
     public int EmployeeId { get; set; }
-
-    public long PersonnelNumber { get; set; }
+    [StringLength(15)]
+    public string PersonnelNumber { get; set; } = null!;
 
     [Column("UserID")]
     public int? UserId { get; set; }
@@ -30,6 +31,9 @@ public partial class Employee
 
     [StringLength(100)]
     public string? MiddleName { get; set; }
+
+    [StringLength(100)]
+    public string WorkEmail { get; set; } = null!;
 
     [StringLength(20)]
     public string Phone { get; set; } = null!;

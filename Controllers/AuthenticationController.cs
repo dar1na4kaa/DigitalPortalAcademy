@@ -47,11 +47,11 @@ namespace DigitalPortalAcademy.Controllers
         }
 
         [HttpPost]
-        public IActionResult SignUp(string email, string password, string fullName, string uniqueCode, string role)
+        public IActionResult SignUp(string email, string password, string role, string firstName, string lastName, string middleName, string uniqueNumber)
         {
             try
             {
-                var newUser = _authenticationService.RegisterUser(email, password, role, fullName, uniqueCode); // Синхронный вызов
+                User newUser = _authenticationService.RegisterUser(email, password, role, firstName,lastName,middleName, uniqueNumber);
 
                 if (newUser != null)
                 {

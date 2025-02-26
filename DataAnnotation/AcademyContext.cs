@@ -42,8 +42,6 @@ public partial class AcademyContext : DbContext
 
     public virtual DbSet<Position> Positions { get; set; }
 
-    public virtual DbSet<RegistrationCode> RegistrationCodes { get; set; }
-
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<Room> Rooms { get; set; }
@@ -183,13 +181,6 @@ public partial class AcademyContext : DbContext
                 .HasConstraintName("FK_Employee_Department");
         });
 
-        modelBuilder.Entity<RegistrationCode>(entity =>
-        {
-            entity.HasKey(e => e.Code).HasName("PK__Registra__A25C5AA6A39EE829");
-
-            entity.Property(e => e.IsUsed).HasDefaultValue(false);
-        });
-
         modelBuilder.Entity<Role>(entity =>
         {
             entity.HasKey(e => e.RolesId).HasName("PK__Roles__C4B278405123492F");
@@ -287,4 +278,5 @@ public partial class AcademyContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
 }

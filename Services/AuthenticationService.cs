@@ -13,51 +13,32 @@ namespace DigitalPortalAcademy.Services
             _context = context;
         }
 
-        public User RegisterUser(string email, string password, string role, string fullName, string uniqueCode)
+        public User RegisterUser(string email, string password, string role, string firstName,string lastName,string middleName, string uniqueNumber)
         {
-            var (firstName, lastName, middleName) = ParseFullName(fullName);
             EnsureEmailIsUnique(email);
-            int userId = GetUserIdByRole(role, firstName, lastName, middleName)
-                         ?? throw new InvalidOperationException($"Пользователь с ФИО {fullName} и ролью {role} не найден.");
-            ValidateUniqueCode(uniqueCode);
+            int userId = GetExistingPersonIdByRole(role, firstName, lastName, middleName,uniqueNumber)
+                         ?? throw new InvalidOperationException($"{role} с ФИО {lastName} {firstName} {middleName} и уникальным номером(студентческого или табельного) не найден.");
 
             var user = new User { Login = email, PasswordHash = PasswordHasher.HashPassword(password) };
             _context.Users.Add(user);
             _context.SaveChanges();
+
             UpdateUserId(role, userId, user.UserId);
             return user;
         }
-
-        private (string FirstName, string LastName, string? MiddleName) ParseFullName(string fullName)
-        {
-            var parts = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length < 2)
-                throw new InvalidOperationException("Полное имя должно содержать минимум имя и фамилию.");
-
-            return (parts[0], parts[1], parts.Length > 2 ? parts[2] : null);
-        }
-
         private void EnsureEmailIsUnique(string email)
         {
             if (_context.Users.Any(u => u.Login == email))
                 throw new InvalidOperationException("Пользователь с таким email уже существует.");
         }
 
-        private void ValidateUniqueCode(string uniqueCode)
-        {
-            var codeEntry = _context.RegistrationCodes.FirstOrDefault(c => c.Code == uniqueCode)
-                            ?? throw new InvalidOperationException("Указанный уникальный код недействителен.");
-            _context.RegistrationCodes.Remove(codeEntry);
-        }
-
-        private int? GetUserIdByRole(string role, string firstName, string lastName, string? middleName)
+        private int? GetExistingPersonIdByRole(string role, string firstName, string lastName, string? middleName, string uniqueNumber)
         {
             return role switch
             {
-                "Преподаватель" => _context.Teachers.FirstOrDefault(t => t.FirstName == firstName && t.LastName == lastName && (middleName == null || t.MiddleName == middleName))?.TeacherId,
-                "Студент" => _context.Students.FirstOrDefault(s => s.FirstName == firstName && s.LastName == lastName && (middleName == null || s.MiddleName == middleName))?.StudentId,
-                "Педагог-организатор" or "Сотрудник учебной части" => _context.Employees.FirstOrDefault(e => e.FirstName == firstName && e.LastName == lastName && (middleName == null || e.MiddleName == middleName))?.EmployeeId,
-                _ => throw new InvalidOperationException("Указанная роль недопустима.")
+                "Преподаватель" => _context.Teachers.FirstOrDefault(t => t.FirstName == firstName && t.LastName == lastName && (middleName == null || t.MiddleName == middleName) && t.PersonnelNumber == uniqueNumber)?.TeacherId,
+                "Студент" => _context.Students.FirstOrDefault(s => s.FirstName == firstName && s.LastName == lastName && (middleName == null || s.MiddleName == middleName) && s.StudentNumber == uniqueNumber)?.StudentId,
+                "Педагог-организатор" or "Сотрудник учебной части" => _context.Employees.FirstOrDefault(e => e.FirstName == firstName && e.LastName == lastName && (middleName == null || e.MiddleName == middleName) && e.PersonnelNumber == uniqueNumber)?.EmployeeId,
             };
         }
 

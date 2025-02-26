@@ -12,8 +12,9 @@ public partial class Curriculum
     [Column("CurriculumID")]
     public int CurriculumId { get; set; }
 
-    public int Course { get; set; }
+    public int StartYear { get; set; } 
 
+    public int StudyYear { get; set; } 
     [Column("SpecialtyID")]
     public int? SpecialtyId { get; set; }
 

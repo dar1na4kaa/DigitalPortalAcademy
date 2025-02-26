@@ -16,12 +16,13 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;                // Защита от JavaScript-доступа
     options.Cookie.IsEssential = true;             // Обязательно для работы
 });
+
 builder.Services.AddDbContext<AcademyContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
-app.UseSession(); // Включите сессии
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

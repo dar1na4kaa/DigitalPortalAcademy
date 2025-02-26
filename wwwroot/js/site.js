@@ -8,6 +8,30 @@
     });
 });
 
+document.getElementById('login-form').addEventListener('submit',function (event) {
+    let isValid = true;
+
+    let email = document.getElementById('email');
+    if (!email.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+        email.classList.add('is-invalid');
+        isValid = false;
+    }
+    else {
+        email.classList.remove('is-invalid')
+    }
+
+    let password = document.getElementById('password');
+    if (!password.value || password.value.length < 8) {
+        password.classList.add('is-invalid');
+        isValid = false;
+    } else {
+        password.classList.remove('is-invalid');
+    }
+
+    if (!isValid) {
+        event.preventDefault();
+    }
+})
 document.getElementById('registrationForm').addEventListener('submit', function (event) {
     let isValid = true;
 
@@ -35,20 +59,29 @@ document.getElementById('registrationForm').addEventListener('submit', function 
         confirmPassword.classList.remove('is-invalid');
     }
 
-    let fullName = document.getElementById('fullName');
-    if (!fullName.value || fullName.value.trim().split(' ').length < 2) {
-        fullName.classList.add('is-invalid');
+    let lastName = document.getElementById('lastName');
+    let firstName = document.getElementById('firstName');
+    let middleName = document.getElementById('middleName');
+
+    if (!lastName.value.trim()) {
+        lastName.classList.add('is-invalid');
         isValid = false;
     } else {
-        fullName.classList.remove('is-invalid');
+        lastName.classList.remove('is-invalid');
     }
 
-    let uniqueCode = document.getElementById('uniqueCode');
-    if (!uniqueCode.value) {
-        uniqueCode.classList.add('is-invalid');
+    if (!firstName.value.trim()) {
+        firstName.classList.add('is-invalid');
         isValid = false;
     } else {
-        uniqueCode.classList.remove('is-invalid');
+        firstName.classList.remove('is-invalid');
+    }
+
+    if (!middleName.value.trim()) {
+        middleName.classList.add('is-invalid');
+        isValid = false;
+    } else {
+        middleName.classList.remove('is-invalid');
     }
 
     let role = document.getElementById('role');
@@ -59,7 +92,25 @@ document.getElementById('registrationForm').addEventListener('submit', function 
         role.classList.remove('is-invalid');
     }
 
+    let identifier = document.getElementById('uniqueNumber');
+    if (!identifier.value || !/^[A-Za-z0-9\-]{6,15}$/.test(identifier.value)) {
+        identifier.classList.add('is-invalid');
+        isValid = false;
+    } else {
+        identifier.classList.remove('is-invalid');
+    }
+
     if (!isValid) {
         event.preventDefault();
     }
 });
+
+document.getElementById('role').addEventListener('change', function () {
+    let studentEmployeeField = document.getElementById('studentEmployeeField');
+    let identifier = document.getElementById('uniqueNumber');
+
+    studentEmployeeField.classList.remove('d-none');
+    identifier.setAttribute("required", "true");
+});
+
+
