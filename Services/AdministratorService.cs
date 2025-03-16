@@ -13,11 +13,12 @@ namespace DigitalPortalAcademy.Services
             _context = new AcademyContext();
         }
 
-        public List<User> GetUsers()
+        public List<User> GetUsers(int? userId)
         {
             return _context.Users
                 .AsNoTracking()
                 .Include(u => u.Role)
+                .Where(u => u.UserId != userId)
                 .Include(u => u.Employees)
                 .Include(u => u.Students)
                 .Include(u => u.Teachers)

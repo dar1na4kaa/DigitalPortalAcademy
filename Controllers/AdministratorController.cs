@@ -1,6 +1,8 @@
 ﻿using DigitalPortalAcademy.Models;
 using DigitalPortalAcademy.Services;
+using DigitalPortalAcademy.Extensions;
 using DigitalPortalAcademy.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,7 +20,7 @@ namespace DigitalPortalAcademy.Controllers
 
         public IActionResult Dashboard()
         {
-            return View(_adminService.GetUsers());
+            return View(_adminService.GetUsers(HttpContext.GetCurrentUserId()));
         }
         public IActionResult Details(int id)
         {

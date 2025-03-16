@@ -9,31 +9,31 @@
     <div class="form-container">
         <h4>Личные данные</h4>
         <form asp-action="Edit" method="post">
-            <input type="hidden" asp-for="UserId" value="@Model.UserId" />
+            <input type="hidden" asp-for="UserId"/>
 
             <div class="mb-3">
                 <label class="form-label">Фамилия</label>
-                <input type="text" class="form-control" asp-for="LastName" value="@Model.LastName" required>
+                <input type="text" class="form-control" asp-for="LastName" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Имя</label>
-                <input type="text" class="form-control" asp-for="FirstName" value="@Model.FirstName" required>
+                <input type="text" class="form-control" asp-for="FirstName" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Отчество</label>
-                <input type="text" class="form-control" asp-for="MiddleName" value="@Model.MiddleName">
+                <input type="text" class="form-control" asp-for="MiddleName">
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Роль</label>
-                <input type="text" class="form-control" asp-for="RoleName" value="@Model.RoleName" readonly>
+                <input type="text" class="form-control" asp-for="RoleName" readonly>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Логин</label>
-                <input type="text" class="form-control" asp-for="Login" value="@Model.Login" required>
+                <input type="text" class="form-control" asp-for="Login" required>
             </div>
 
             <h4 class="mt-4">Смена пароля</h4>
