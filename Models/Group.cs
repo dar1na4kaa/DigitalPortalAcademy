@@ -18,8 +18,6 @@ public partial class Group
     [Column("CuratorID")]
     public int CuratorId { get; set; }
 
-    public int CourseNumber { get; set; }
-
     [Column("SpecialtyID")]
     public int SpecialtyId { get; set; }
 

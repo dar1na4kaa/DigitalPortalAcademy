@@ -1,6 +1,5 @@
 using DigitalPortalAcademy;
 using DigitalPortalAcademy.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Регистрация вашего сервиса в DI-контейнере
 
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<AdministratorService>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession(options =>

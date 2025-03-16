@@ -49,7 +49,9 @@
                                 <option value="">Выберите роль</option>
                                 <option value="Студент">Студент</option>
                                 <option value="Преподаватель">Преподаватель</option>
-                                <option value="Сотрудник">Сотрудник</option>
+                                <option value="Педагог-организатор">Педагог-организатор</option>
+                                <option value="Сотрудник учебной части">Сотрудник учебной части</option>
+                                <option value="Администратор">Администратор</option>
                             </select>
                             <div class="invalid-feedback">Выберите роль</div>
                         </div>
@@ -71,10 +73,10 @@
                             <input type="text" class="form-control" id="middleName" name="middleName" placeholder="Введите отчество">
                         </div>
 
-                        <div class="mb-4 d-none" id="studentEmployeeField">
-                            <label for="identifier" class="form-label">Номер студенческого / Табельный номер</label>
-                            <input type="text" class="form-control" id="identifier" name="uniqueNumber" placeholder="Введите номер" pattern="[A-Za-z0-9\-]{6,15}">
-                            <div class="invalid-feedback">Введите корректный номер (от 6 до 15 символов)</div>
+                        <div class="mb-4" id="studentEmployeeField">
+                            <label for="uniqueNumber" class="form-label">Номер студенческого / Табельный номер</label>
+                            <input type="text" class="form-control" id="uniqueNumber" name="uniqueNumber" placeholder="Введите номер" pattern="[A-Za-z0-9\-]{4,15}">
+                            <div class="invalid-feedback">Введите корректный номер (от 4 до 15 символов)</div>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>

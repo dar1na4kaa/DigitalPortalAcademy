@@ -14,7 +14,7 @@ namespace DigitalPortalAcademy.Services
 
             return user.Role.Name switch
             {
-                "Администратор" => controller.RedirectToAction("Test", "Administrator"),
+                "Администратор" => controller.RedirectToAction("Dashboard", "Administrator"),
                 "Преподаватель" => controller.RedirectToAction("Login", "Authentication"),
                 _ => throw new NotImplementedException()
             };

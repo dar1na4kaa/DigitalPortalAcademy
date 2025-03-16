@@ -13,19 +13,43 @@ namespace DigitalPortalAcademy.Services
             _context = context;
         }
 
-        public User RegisterUser(string email, string password, string role, string firstName,string lastName,string middleName, string uniqueNumber)
+        public User RegisterUser(string email, string password, string role, string firstName, string lastName, string middleName, string uniqueNumber)
         {
             EnsureEmailIsUnique(email);
-            int userId = GetExistingPersonIdByRole(role, firstName, lastName, middleName,uniqueNumber)
-                         ?? throw new InvalidOperationException($"{role} с ФИО {lastName} {firstName} {middleName} и уникальным номером(студентческого или табельного) не найден.");
 
-            var user = new User { Login = email, PasswordHash = PasswordHasher.HashPassword(password) };
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            int? userId = GetExistingPersonIdByRole(role, firstName, lastName, middleName, uniqueNumber);
+            if (userId == null)
+            {
+                throw new InvalidOperationException($"{role} с ФИО {lastName} {firstName} {middleName} и уникальным номером {uniqueNumber} не найден.");
+            }
 
-            UpdateUserId(role, userId, user.UserId);
-            return user;
+            var roleEntity = _context.Roles.FirstOrDefault(t => t.Name == role);
+            if (roleEntity == null)
+            {
+                throw new InvalidOperationException($"Роль '{role}' не найдена в системе.");
+            }
+
+            var user = new User
+            {
+                Login = email,
+                PasswordHash = PasswordHasher.HashPassword(password),
+                RoleId = roleEntity.RolesId
+            };
+
+            try
+            {
+                _context.Users.Add(user);
+                _context.SaveChanges();
+
+                UpdateUserId(role, userId.Value, user.UserId);
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Ошибка при регистрации пользователя", ex);
+            }
         }
+
         private void EnsureEmailIsUnique(string email)
         {
             if (_context.Users.Any(u => u.Login == email))
@@ -36,9 +60,9 @@ namespace DigitalPortalAcademy.Services
         {
             return role switch
             {
-                "Преподаватель" => _context.Teachers.FirstOrDefault(t => t.FirstName == firstName && t.LastName == lastName && (middleName == null || t.MiddleName == middleName) && t.PersonnelNumber == uniqueNumber)?.TeacherId,
+                "Преподаватель" => _context.Teachers.First(t => t.FirstName == firstName && t.LastName == lastName && (middleName == null || t.MiddleName == middleName) && t.PersonnelNumber == uniqueNumber)?.TeacherId,
                 "Студент" => _context.Students.FirstOrDefault(s => s.FirstName == firstName && s.LastName == lastName && (middleName == null || s.MiddleName == middleName) && s.StudentNumber == uniqueNumber)?.StudentId,
-                "Педагог-организатор" or "Сотрудник учебной части" => _context.Employees.FirstOrDefault(e => e.FirstName == firstName && e.LastName == lastName && (middleName == null || e.MiddleName == middleName) && e.PersonnelNumber == uniqueNumber)?.EmployeeId,
+                "Педагог-организатор" or "Сотрудник учебной части" or "Администратор" => _context.Employees.FirstOrDefault(e => e.FirstName == firstName && e.LastName == lastName && (middleName == null || e.MiddleName == middleName) && e.PersonnelNumber == uniqueNumber)?.EmployeeId,
             };
         }
 
@@ -48,7 +72,7 @@ namespace DigitalPortalAcademy.Services
             {
                 "Преподаватель" => _context.Teachers.Find(dbId),
                 "Студент" => _context.Students.Find(dbId),
-                "Педагог-организатор" or "Сотрудник учебной части" => _context.Employees.Find(dbId),
+                "Педагог-организатор" or "Сотрудник учебной части" or "Администратор" => _context.Employees.Find(dbId),
                 _ => throw new InvalidOperationException("Указанная роль недопустима.")
             };
 

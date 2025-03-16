@@ -1,38 +1,114 @@
-﻿@{
+﻿@model List<DigitalPortalAcademy.Models.User>
+@{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 <div class="container">
-    <div class="card">
-        <div class="card-body">
-            <h2 class="card-title">Личный кабинет в организации</h2>
-            <p class="card-text">Добро пожаловать в ваш личный кабинет. Здесь вы можете просматривать свою информацию, редактировать профиль и больше узнать о возможностях.</p>
-            <h4 class="mb-4">Ваши данные:</h4>
-            <div class="users-list">
-                <!-- Пример карточки пользователя -->
-                <div class="user-card">
-                    <div class="user-header">
-                        <img src="https://via.placeholder.com/80" alt="User Avatar" class="student-avatar">
-                        <div class="account-info">
-                            <h4 class="student-name">Иван Иванов</h4>
-                            <p class="student-email">ivan.ivanov@academia.com</p>
-                        </div>
-                    </div>
-                    <div class="account-details">
-                        <h5>Личные данные</h5>
-                        <p><strong>Дата рождения:</strong> 12.03.2000</p>
-                        <p><strong>Телефон:</strong> +7 999 123 45 67</p>
-                    </div>
-                    <div class="account-education">
-                        <h5>Образование</h5>
-                        <p><strong>Отделение:</strong> ДЭМ</p>
-                        <p><strong>Группа:</strong> ДИ-25</p>
-                        <p><strong>Специальность:</strong>09.02.07</p>
-                    </div>
-                    <div class="user-actions">
-                        <a href="/assets/pages/account/edit-account.html" class="btn btn-primary">Редактировать профиль</a>
-                    </div>
-                </div>
+
+    <h2 class="mb-4">Список пользователей</h2>
+
+    <!-- Фильтры -->
+    <div class="filters mb-4">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label for="roleSelect" class="form-label">Роль</label>
+                <select class="form-select" id="roleSelect" onchange="window.location.href=this.value;">
+                    <option value="users.html">Все</option>
+                    <option value="">Преподаватели</option>
+                    <option value="">Группы-студенты</option>
+                    <option value="">Учебная часть</option>
+                    <option value="">Педагоги-организаторы</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="departmentSelect" class="form-label">Отделение</label>
+                <select class="form-select" id="departmentSelect"
+                        onchange="window.location.href=this.value;">
+                    <option value="">Все</option>
+                    <option value=""></option>
+                    <option value=""></option>
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="searchInput" class="form-label">Поиск по ФИО</label>
+                <input type="text" class="form-control" placeholder="Введите ФИО" name="search"
+                       id="searchInput">
             </div>
         </div>
     </div>
+
+    <!-- Карточки пользователей -->
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            <div class="col"><label class="form-label">К сожалению, ничего не найдено</label></div>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            @foreach (var user in Model)
+            {
+                <div class="col">
+                    <div class="card user-card">
+                        @switch (user.RoleId)
+                        {
+                            case 3:
+                                {
+                                    var teacher = user.Teachers.FirstOrDefault(t => t.UserId == user.UserId);
+                                    if (teacher != null)
+                                    {
+                                        string fullName = $"{teacher.LastName} {teacher.FirstName} {teacher.MiddleName}";
+                                        <div class="card-header">@fullName</div>
+                                        <div class="card-body">
+                                            <p><strong>Роль:</strong>@user.Role.Name</p>
+                                            <p><strong>Электронная почта:</strong>@user.Login</p>
+                                        </div>
+                                    }
+                                    break;
+                                }
+
+                            case 2:
+                                {
+                                    var student = user.Students.FirstOrDefault(t => t.UserId == user.UserId);
+                                    if (student != null)
+                                    {
+                                        string fullName = $"{student.LastName} {student.FirstName} {student.MiddleName}";
+                                        <div class="card-header">@fullName</div>
+                                        <div class="card-body">
+                                            <p><strong>Роль:</strong>@user.Role.Name</p>
+                                            <p><strong>Электронная почта:</strong>@user.Login</p>
+                                        </div>
+                                    }
+                                    break;
+                                }
+
+                            case 1 or 4:
+                                {
+                                    var employee = user.Employees.FirstOrDefault(t => t.UserId == user?.UserId);
+                                    if (employee != null)
+                                    {
+                                        string fullName = $"{employee.LastName} {employee.FirstName} {employee.MiddleName}";
+                                        <div class="card-header">@fullName</div>
+                                        <div class="card-body">
+                                            <p><strong>Роль:</strong>@user.Role.Name</p>
+                                            <p><strong>Электронная почта:</strong>@user.Login</p>
+                                        </div>
+                                    }
+                                    break;
+                                }
+                        }
+                        <div class="card-footer">
+                            <a href="@Url.Action("Details", "Administrator", new { id = user.UserId })" class="btn btn-info">Посмотреть</a>
+                            <a href="@Url.Action("Edit", "Administrator", new { id = user.UserId })" class="btn btn-warning">Редактировать</a>
+                            <a href="@Url.Action("Delete", "Administrator", new { id = user.UserId })" class="btn btn-danger"
+                               onclick="return confirm('Вы уверены, что хотите удалить пользователя?');">
+                                Удалить
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
 </div>

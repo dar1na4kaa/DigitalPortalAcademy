@@ -34,10 +34,6 @@ namespace DigitalPortalAcademy.Controllers
             HttpContext.Session.SetString("UserEmail", user.Login);
             HttpContext.Session.SetString("UserRole", user.Role.Name);
 
-            Console.WriteLine("UserId: " + HttpContext.Session.GetString("UserId"));
-            Console.WriteLine("UserEmail: " + HttpContext.Session.GetString("UserEmail"));
-            Console.WriteLine("UserRole: " + HttpContext.Session.GetString("UserRole"));
-
             return RoleRedirectService.GetActionByRole(this, user);
         }
 
@@ -51,23 +47,24 @@ namespace DigitalPortalAcademy.Controllers
         {
             try
             {
-                User newUser = _authenticationService.RegisterUser(email, password, role, firstName,lastName,middleName, uniqueNumber);
+                User newUser = _authenticationService.RegisterUser(email.Trim(), password, role, firstName.Trim(),lastName.Trim(),middleName.Trim(), uniqueNumber);
 
                 if (newUser != null)
                 {
                     ViewBag.SuccessMessage = "Регистрация прошла успешно!";
-                    return RedirectToAction("Login", "Home");
+                    return RedirectToAction("Login", "Authentication");
                 }
+
                 else
                 {
                     ViewBag.ErrorMessage = "Ошибка при регистрации";
                     return View();
                 }
             }
+
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = ex.Message;
-                return View();
+                throw new ApplicationException("Ошибка при регистрации пользователя", ex);
             }
         }
     }

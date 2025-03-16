@@ -93,7 +93,7 @@ document.getElementById('registrationForm').addEventListener('submit', function 
     }
 
     let identifier = document.getElementById('uniqueNumber');
-    if (!identifier.value || !/^[A-Za-z0-9\-]{6,15}$/.test(identifier.value)) {
+    if (!identifier.value || !/^[A-Za-z0-9\-]{4,15}$/.test(identifier.value)) {
         identifier.classList.add('is-invalid');
         isValid = false;
     } else {
@@ -103,14 +103,6 @@ document.getElementById('registrationForm').addEventListener('submit', function 
     if (!isValid) {
         event.preventDefault();
     }
-});
-
-document.getElementById('role').addEventListener('change', function () {
-    let studentEmployeeField = document.getElementById('studentEmployeeField');
-    let identifier = document.getElementById('uniqueNumber');
-
-    studentEmployeeField.classList.remove('d-none');
-    identifier.setAttribute("required", "true");
 });
 
 
