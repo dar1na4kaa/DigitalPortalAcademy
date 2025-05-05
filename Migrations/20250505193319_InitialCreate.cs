@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DigitalPortalAcademy.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateDb : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -245,7 +245,7 @@ namespace DigitalPortalAcademy.Migrations
                 {
                     EmployeeID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PersonnelNumber = table.Column<long>(type: "bigint", nullable: false),
+                    PersonnelNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     UserID = table.Column<int>(type: "int", nullable: true),
                     PositionID = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -275,7 +275,7 @@ namespace DigitalPortalAcademy.Migrations
                 {
                     TeacherId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PersonnelNumber = table.Column<long>(type: "bigint", nullable: false),
+                    PersonnelNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     UserID = table.Column<int>(type: "int", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -307,7 +307,6 @@ namespace DigitalPortalAcademy.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GroupName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CuratorID = table.Column<int>(type: "int", nullable: false),
-                    CourseNumber = table.Column<int>(type: "int", nullable: false),
                     SpecialtyID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

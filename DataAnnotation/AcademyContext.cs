@@ -63,7 +63,7 @@ public partial class AcademyContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-6QHTSJ1;Database=AttApplication;Trusted_Connection=True;Encrypt = true;TrustServerCertificate = true");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-6QHTSJ1\\SQLEXPRESS;Database=AttApplication;Trusted_Connection=True;Encrypt = true;TrustServerCertificate = true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

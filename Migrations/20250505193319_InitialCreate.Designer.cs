@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigitalPortalAcademy.Migrations
 {
     [DbContext(typeof(AcademyContext))]
-    [Migration("20250226114617_InitialCreateDb")]
-    partial class InitialCreateDb
+    [Migration("20250505193319_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -245,8 +245,10 @@ namespace DigitalPortalAcademy.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<long>("PersonnelNumber")
-                        .HasColumnType("bigint");
+                    b.Property<string>("PersonnelNumber")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -290,9 +292,6 @@ namespace DigitalPortalAcademy.Migrations
                         .HasColumnName("GroupID");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GroupId"));
-
-                    b.Property<int>("CourseNumber")
-                        .HasColumnType("int");
 
                     b.Property<int>("CuratorId")
                         .HasColumnType("int")
@@ -681,8 +680,10 @@ namespace DigitalPortalAcademy.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<long>("PersonnelNumber")
-                        .HasColumnType("bigint");
+                    b.Property<string>("PersonnelNumber")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
