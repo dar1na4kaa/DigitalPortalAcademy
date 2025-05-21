@@ -60,5 +60,41 @@ namespace DigitalPortalAcademy.Controllers
             _adminService.DeleteUser(id);
             return RedirectToAction("Dashboard");
         }
+        [HttpGet]
+        public IActionResult Account()
+        {
+            var userId = HttpContext.GetCurrentUserId();
+            if (userId == null || userId == 0) return NotFound();
+
+            var viewModel = _adminService.GetUserById(userId.Value);
+            if (viewModel == null) return NotFound();
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult EditAccount()
+        {
+            var userId = HttpContext.GetCurrentUserId();
+            if (userId == null || userId == 0) NotFound();
+
+            var viewModel = _adminService.GetAccountForEdit(userId.Value);
+            if (viewModel == null) return NotFound();
+
+            return View(viewModel);
+        }
+
+
+        [HttpPost]
+        public IActionResult EditAccount(EditAccountInformationViewModel model)
+        {
+            bool success = _adminService.UpdateAccount(model);
+            if (!success)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction("Dashboard", "Administrator");
+        }
     }
 }

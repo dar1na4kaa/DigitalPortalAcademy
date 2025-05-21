@@ -90,12 +90,21 @@ namespace DigitalPortalAcademy.Services
 
         public User? GetUserByEmail(string email)
         {
-            return _context.Users.Include(u => u.Role).FirstOrDefault(u => u.Login == email);
+            try
+            {
+                return _context.Users.Include(u => u.Role).FirstOrDefault(u => u.Login == email);
+
+            }
+            catch(Exception ex)
+            {
+                throw new InvalidOperationException(ex.Message);
+            }
         }
 
         public bool VerifyPassword(User user, string enteredPassword)
         {
-            return PasswordHasher.HashPassword(enteredPassword) == user.PasswordHash;
+            /*return PasswordHasher.HashPassword(enteredPassword) == user.PasswordHash;*/
+            return enteredPassword == user.PasswordHash;
         }
     }
 }

@@ -105,4 +105,7 @@ document.getElementById('registrationForm').addEventListener('submit', function 
     }
 });
 
+$('#Phone').inputmask('+7 (999) 999-99-99');
+
+
 

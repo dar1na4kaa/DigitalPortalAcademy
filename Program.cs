@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<AdministratorService>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {

@@ -64,6 +64,24 @@ namespace DigitalPortalAcademy.Services
                 MiddleName = employee?.MiddleName ?? student?.MiddleName ?? teacher?.MiddleName
             };
         }
+        public EditAccountInformationViewModel? GetAccountForEdit(int userId)
+        {
+            var user = GetUserById(userId);
+            if (user == null) return null;
+
+            var employee = user.Employees.FirstOrDefault();
+
+            return new EditAccountInformationViewModel
+            {
+                UserId = user.UserId,
+                Login = user.Login,
+                RoleName = user.Role.Name,
+                FirstName = employee?.FirstName ?? string.Empty,
+                LastName = employee?.LastName ?? string.Empty,
+                MiddleName = employee?.MiddleName,
+                CurrentAvatarPath = user.PhotoPath
+            };
+        }
 
         public bool UpdateUser(EditUserViewModel model)
         {
@@ -96,6 +114,37 @@ namespace DigitalPortalAcademy.Services
                 teacher.LastName = model.LastName;
                 teacher.MiddleName = model.MiddleName;
             }
+
+            _context.SaveChanges();
+            return true;
+        }
+        public bool UpdateAccount(EditAccountInformationViewModel model)
+        {
+            var user = GetUserById(model.UserId);
+            if (user == null) return false;
+
+            user.Login = model.Login;
+
+            if (model.AvatarFile != null)
+            {
+                var filePath = Path.Combine("wwwroot", "lib","img","files","photo-user", model.AvatarFile.FileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.AvatarFile.CopyTo(stream);
+                }
+
+                user.PhotoPath = model.AvatarFile.FileName;
+            }
+
+            if (!string.IsNullOrEmpty(model.NewPassword))
+                user.PasswordHash = PasswordHasher.HashPassword(model.NewPassword);
+
+            var employee = user.Employees.First();
+            employee.FirstName = model.FirstName;
+            employee.LastName = model.LastName;
+            employee.MiddleName = model.MiddleName;
+
 
             _context.SaveChanges();
             return true;

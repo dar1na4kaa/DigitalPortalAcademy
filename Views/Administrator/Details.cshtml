@@ -1,71 +1,93 @@
 ﻿@model DigitalPortalAcademy.Models.User
 @{
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 <div class="container">
-    <h2 class="mb-4">Информация о пользователе</h2>
+	<h2 class="mb-4">Информация о пользователе</h2>
 
-    <!-- Информация о пользователе -->
-    @if (Model != null)
-    {
-        <div class="user-details mb-4">
-            <div class="row">
+	<!-- Информация о пользователе -->
+	@if (Model != null)
+	{
+		<div class="user-details mb-4">
+			<div class="row">
 
-                <div class="col-md-6">
-                    <h4>Данные профиля</h4>
-                    <p><strong>Электронная почта:</strong> @(Model.Login ?? "Не указана")</p>
-                    <p><strong>Роль:</strong> @(Model.Role.Name ?? "Не указана")</p>
-                </div>
+				<div class="col-md-6">
+					<h4>Данные профиля</h4>
+					<p><strong>Электронная почта:</strong> @(Model.Login ?? "Не указана")</p>
+					<p><strong>Роль:</strong> @(Model.Role.Name ?? "Не указана")</p>
+				</div>
 
-                <div class="col-md-6">
-                    <h4>Личные данные</h4>
+				<div class="col-md-6">
+					<h4>Личные данные</h4>
 
-                    @if (Model.Employees.Any())
-                    {
-                        var employee = Model.Employees.First();
-                        <p><strong>ФИО:</strong> @($"{employee.LastName} {employee.FirstName} {employee.MiddleName}")</p>
-                        <p><strong>Отделение:</strong> @(employee.Position.Department.DepartmentName ?? "Не указано")</p>
-                        <p><strong>Должность:</strong> @(employee.Position.Name ?? "Не указано")</p>
-                        <p><strong>Рабочая эл.почта:</strong> @(employee.WorkEmail ?? "Не указана")</p>
-                    }
-                    else if (Model.Students.Any())
-                    {
-                        var student = Model.Students.First();
-                        <p><strong>ФИО:</strong> @($"{student.LastName} {student.FirstName} {student.MiddleName}")</p>
-                        <p><strong>Специальность:</strong> @(student.Group.Specialty.SpecialtyName ?? "Не указана")</p>
-                        <p><strong>Отделение:</strong> @(student.Group.Curator.Position.Department.DepartmentName ?? "Не указано")</p>
-                        <p><strong>Группа:</strong> @(student.Group.GroupName ?? "Не указана")</p>
-                        <p><strong>Куратор:</strong> @($"{student.Group.Curator.LastName} {student.Group.Curator.FirstName} {student.Group.Curator.MiddleName}" ?? "Не указан")</p>
-                        <p><strong>Номер телефона:</strong> @(student.Phone ?? "Не указан")</p>
+					@switch (Model.RoleId)
+					{
+						case 3 or 4 or 5:
+							try
+							{
+								var employee = Model.Employees.First();
+								<p><strong>ФИО:</strong> @($"{employee.LastName} {employee.FirstName} {employee.MiddleName}")</p>
+								<p><strong>Отделение:</strong> @(employee.Position.Department.DepartmentName ?? "Не указано")</p>
+								<p><strong>Должность:</strong> @(employee.Position.Name ?? "Не указано")</p>
+								<p><strong>Рабочая эл.почта:</strong> @(employee.WorkEmail ?? "Не указана")</p>
+							}
+							catch
+							{
+								<p><strong>Личные данные не найдены</strong></p>
+							}
 
-                    }
-                    else if (Model.Teachers.Any())
-                    {
-                        var teacher = Model.Teachers.First();
-                        <p><strong>ФИО:</strong> @($"{teacher.LastName} {teacher.FirstName} {teacher.MiddleName}")</p>
-                        <p><strong>Цикловая комиссия:</strong> @(teacher.CycleCommission.CommissionName ?? "Не указана")</p>
-                        <p><strong>Номер телефона:</strong> @(teacher.Phone ?? "Не указан")</p>
-                    }
-                    else
-                    {
-                        <p><strong>Личные данные не найдены</strong></p>
-                    }
+							break;
 
-                </div>
-            </div>
-        </div>
+						case 1:
+							try
+							{
+								var student = Model.Students.First();
+								<p><strong>ФИО:</strong> @($"{student.LastName} {student.FirstName} {student.MiddleName}")</p>
+								<p><strong>Специальность:</strong> @(student.Group.Specialty.SpecialtyName ?? "Не указана")</p>
+								<p><strong>Отделение:</strong> @(student.Group.Curator.Position.Department.DepartmentName ?? "Не указано")</p>
+								<p><strong>Группа:</strong> @(student.Group.GroupName ?? "Не указана")</p>
+								<p><strong>Куратор:</strong> @($"{student.Group.Curator.LastName} {student.Group.Curator.FirstName} {student.Group.Curator.MiddleName}" ?? "Не указан")</p>
+								<p><strong>Номер телефона:</strong> @(student.Phone ?? "Не указан")</p>
+							}
+							catch
+							{
+								<p><strong>Личные данные не найдены</strong></p>
+							}
+							break;
 
-        <!-- Кнопки для редактирования и удаления -->
-        <div class="d-flex">
-            <a href="@Url.Action("Edit", "Administrator", new { id = Model.UserId })" class="btn btn-warning me-3">Редактировать</a>
-            <a href="@Url.Action("Delete", "Administrator", new { id = Model.UserId })" class="btn btn-danger"
-               onclick="return confirm('Вы уверены, что хотите удалить пользователя?');">
-                Удалить
-            </a>
-        </div>
-    }
-    else
-    {
-        <p class="text-danger">Пользователь не найден.</p>
-    }
+						case 2:
+							try
+							{
+								var teacher = Model.Teachers.First();
+								<p><strong>ФИО:</strong> @($"{teacher.LastName} {teacher.FirstName} {teacher.MiddleName}")</p>
+								<p><strong>Цикловая комиссия:</strong> @(teacher.CycleCommission.CommissionName ?? "Не указана")</p>
+								<p><strong>Номер телефона:</strong> @(teacher.Phone ?? "Не указан")</p>
+							}
+							catch
+							{
+								<p><strong>Личные данные не найдены</strong></p>
+							}
+							break;
+
+						default:
+							<p><strong>Личные данные не найдены</strong></p>
+							break;
+					}
+				</div>
+			</div>
+		</div>
+
+		<!-- Кнопки для редактирования и удаления -->
+		<div class="d-flex">
+			<a href="@Url.Action("Edit", "Administrator", new { id = Model.UserId })" class="btn btn-warning me-3">Редактировать</a>
+			<a href="@Url.Action("Delete", "Administrator", new { id = Model.UserId })" class="btn btn-danger"
+			   onclick="return confirm('Вы уверены, что хотите удалить пользователя?');">
+				Удалить
+			</a>
+		</div>
+	}
+	else
+	{
+		<p class="text-danger">Пользователь не найден.</p>
+	}
 </div>

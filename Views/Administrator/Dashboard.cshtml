@@ -53,7 +53,7 @@
                     <div class="card user-card">
                         @switch (user.RoleId)
                         {
-                            case 3:
+                            case 2:
                                 {
                                     var teacher = user.Teachers.FirstOrDefault(t => t.UserId == user.UserId);
                                     if (teacher != null)
@@ -68,7 +68,7 @@
                                     break;
                                 }
 
-                            case 2:
+                            case 1:
                                 {
                                     var student = user.Students.FirstOrDefault(t => t.UserId == user.UserId);
                                     if (student != null)
@@ -83,7 +83,7 @@
                                     break;
                                 }
 
-                            case 1 or 4:
+                            case 3 or 4 or 5:
                                 {
                                     var employee = user.Employees.FirstOrDefault(t => t.UserId == user?.UserId);
                                     if (employee != null)

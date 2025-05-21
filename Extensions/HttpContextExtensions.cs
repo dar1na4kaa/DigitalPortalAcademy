@@ -5,8 +5,10 @@
         public static int? GetCurrentUserId(this HttpContext context)
         {
             string? userIdStr = context.Session.GetString("UserId");
-            return int.TryParse(userIdStr, out int userId) ? userId : null;
+            return int.TryParse(userIdStr, out int userId) ? userId : (int?)null;
         }
+
+
 
         public static string? GetCurrentUserEmail(this HttpContext context)
         {
