@@ -1,0 +1,13 @@
+﻿@Model String
+@{
+	Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+<div class="container">
+	<div class="card">
+		<div class="card-body">
+			<h3 class="card-title">Учебный план на год</h3>
+			<p class="card-text">Здесь вы можете просмотреть и скачать учебный план на текущий год в формате PDF.</p>
+			<a href="@Model" class="btn-primary" download>Скачать учебный план (PDF)</a>
+		</div>
+	</div>
+</div>

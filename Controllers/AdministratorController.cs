@@ -2,6 +2,7 @@
 using DigitalPortalAcademy.Extensions;
 using DigitalPortalAcademy.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using DigitalPortalAcademy.Models;
 
 namespace DigitalPortalAcademy.Controllers
 {
@@ -76,7 +77,7 @@ namespace DigitalPortalAcademy.Controllers
         public IActionResult EditAccount()
         {
             var userId = HttpContext.GetCurrentUserId();
-            if (userId == null || userId == 0) NotFound();
+            if (userId == null || userId == 0) return NotFound();
 
             var viewModel = _adminService.GetAccountForEdit(userId.Value);
             if (viewModel == null) return NotFound();
@@ -96,5 +97,14 @@ namespace DigitalPortalAcademy.Controllers
 
             return RedirectToAction("Dashboard", "Administrator");
         }
+        public IActionResult Index(int? roleId, string? search)
+        {
+            ViewBag.CurrentRoleId = roleId;
+            ViewBag.CurrentSearch = search;
+
+            var users = _adminService.GetFilteredUsers(roleId, search);
+            return View(users);
+        }
+
     }
 }

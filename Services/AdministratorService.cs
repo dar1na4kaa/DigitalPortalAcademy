@@ -37,13 +37,29 @@ namespace DigitalPortalAcademy.Services
 
         public bool DeleteUser(int id)
         {
-            var user = _context.Users.Find(id);
+            var user = _context.Users
+                .Include(u => u.Employees)
+                .Include(u => u.Students)
+                .Include(u => u.Teachers)
+                .FirstOrDefault(u => u.UserId == id);
+
             if (user == null) return false;
+
+            if (user.Employees != null)
+                _context.Employees.RemoveRange(user.Employees);
+
+            if (user.Students != null)
+                _context.Students.RemoveRange(user.Students);
+
+            if (user.Teachers != null)
+                _context.Teachers.RemoveRange(user.Teachers);
 
             _context.Users.Remove(user);
             _context.SaveChanges();
+
             return true;
         }
+
 
         public EditUserViewModel? GetUserForEdit(int userId)
         {
@@ -127,7 +143,7 @@ namespace DigitalPortalAcademy.Services
 
             if (model.AvatarFile != null)
             {
-                var filePath = Path.Combine("wwwroot", "lib","img","files","photo-user", model.AvatarFile.FileName);
+                var filePath = Path.Combine("wwwroot", "lib", "img", "files", "photo-user", model.AvatarFile.FileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
@@ -148,6 +164,43 @@ namespace DigitalPortalAcademy.Services
 
             _context.SaveChanges();
             return true;
+        }
+        public List<User> GetFilteredUsers(int? roleId, string? search)
+        {
+            var usersQuery = _context.Users
+                .Include(u => u.Role)
+                .Include(u => u.Employees)
+                    .ThenInclude(e => e.Position)
+                        .ThenInclude(p => p.Department)
+                .Include(u => u.Students)
+                    .ThenInclude(s => s.Group)
+                        .ThenInclude(g => g.Curator)
+                            .ThenInclude(c => c.Position)
+                                .ThenInclude(p => p.Department)
+                .Include(u => u.Teachers)
+                .AsQueryable();
+
+            if (roleId.HasValue)
+            {
+                usersQuery = usersQuery.Where(u => u.RoleId == roleId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                string lowerSearch = search.ToLower();
+                usersQuery = usersQuery.Where(u =>
+                    u.Employees.Any(e => (e.LastName + " " + e.FirstName + " " + e.MiddleName).ToLower().Contains(lowerSearch)) ||
+                    u.Students.Any(s => (s.LastName + " " + s.FirstName + " " + s.MiddleName).ToLower().Contains(lowerSearch)) ||
+                    u.Teachers.Any(t => (t.LastName + " " + t.FirstName + " " + t.MiddleName).ToLower().Contains(lowerSearch)));
+            }
+
+            return usersQuery.ToList();
+        }
+
+
+        public List<Department> GetAllDepartments()
+        {
+            return _context.Departments.ToList();
         }
     }
 }

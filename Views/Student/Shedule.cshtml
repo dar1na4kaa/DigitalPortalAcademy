@@ -1,0 +1,73 @@
+﻿@model List<DigitalPortalAcademy.ViewModels.SheduleViewModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+
+    // Русские дни недели в правильном порядке
+    var russianDays = new Dictionary<string, string>
+    {
+        { "monday", "Понедельник" },
+        { "tuesday", "Вторник" },
+        { "wednesday", "Среда" },
+        { "thursday", "Четверг" },
+        { "friday", "Пятница" },
+        { "saturday", "Суббота" }
+    };
+}
+
+<div class="container">
+    <div class="schedule-cards">
+        <div class="schedule-card-body">
+            <h4>Выберите полугодие:</h4>
+            <div class="semester-select">
+                <button class="semester-btn" onclick="showWeeks('semester1')" type="button">1-й семестр</button>
+                <button class="semester-btn" onclick="showWeeks('semester2')" type="button">2-й семестр</button>
+            </div>
+
+            <!-- Кнопки дней для 1-го семестра -->
+            <div id="semester1" class="semester-weeks" style="display:none;">
+                <h4>Выберите день 1-го семестра:</h4>
+                @foreach (var day in russianDays)
+                {
+                    <button class="semester-btn" onclick="toggleScheduleVisibility('@day.Key')" type="button">@day.Value</button>
+                }
+            </div>
+
+            <!-- Кнопки дней для 2-го семестра -->
+            <div id="semester2" class="semester-weeks" style="display:none;">
+                <h4>Выберите день 2-го семестра:</h4>
+                @foreach (var day in russianDays)
+                {
+                    <button class="semester-btn" onclick="toggleScheduleVisibility('@day.Key')" type="button">@day.Value</button>
+                }
+                <button class="semester-btn" onclick="showConsultation()">Консультации</button>
+            </div>
+        </div>
+
+        <!-- Расписание по дням недели -->
+        <div id="schedule-container" class="schedule-container" style="display:none;">
+            @foreach (var daySchedule in Model)
+            {
+                var dayId = daySchedule.Day.ToString().ToLower();
+                <div id="@dayId" class="schedule-day" style="display:none;">
+                    <h4>@(russianDays.ContainsKey(dayId) ? russianDays[dayId] : daySchedule.Day.ToString())</h4>
+                    @if (daySchedule.Pairs != null && daySchedule.Pairs.Count > 0)
+                    {
+                        <ul>
+                            @foreach (var pair in daySchedule.Pairs)
+                            {
+                                <li>
+                                    @pair.NumberPair.<strong> @pair.TimeSlot</strong> — @pair.PairName — @pair.Room (@pair.ClassType)
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>Занятий нет.</p>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

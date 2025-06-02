@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<AdministratorService>();
+builder.Services.AddScoped<StudentService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 

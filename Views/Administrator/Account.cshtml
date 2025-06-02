@@ -1,74 +1,73 @@
 ﻿@model DigitalPortalAcademy.Models.User
+
 @{
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+	var employee = Model?.Employees?.FirstOrDefault();
 }
 
 <div class="container">
-    <div class="card">
-        <div class="card-body">
-            <h2 class="card-title">Личный кабинет</h2>
-            <p class="card-text">Добро пожаловать! Здесь вы можете управлять своей учетной записью.</p>
+	<div class="card">
+		<div class="card-body">
+			<h2 class="card-title">Личный кабинет</h2>
+			<p class="card-text">Добро пожаловать! Здесь вы можете управлять своей учетной записью.</p>
 
-            @if (Model != null)
-            {
-                var employee = Model.Employees.FirstOrDefault(); 
-                if (employee != null) 
-                {
-                    <div class="users-list">
-                        <div class="user-card">
-                            <!-- Заголовок с аватаром -->
-                            <div class="user-header">
-                                <img src="@(Model.PhotoPath ?? "~/default-avatar.png")"
-                                     alt="Аватар"
-                                     class="student-avatar"
-                                     onerror="this.src='/default-avatar.png'">
-                                <div class="account-info">
-                                    <h4 class="student-name">
-                                        @employee.LastName @employee.FirstName @employee.MiddleName
-                                    </h4>
-                                    <p class="student-email">
-                                        @Model.Login
-                                    </p>
-                                </div>
-                            </div>
+			@if (Model == null)
+			{
+				<div class="alert alert-warning">
+					Данные пользователя не найдены.
+				</div>
+			}
+			else if (employee == null)
+			{
+				<div class="alert alert-warning">
+					Данные сотрудника не найдены.
+				</div>
+			}
+			else
+			{
+				<div class="users-list">
+					<div class="user-card">
+						<!-- Заголовок с аватаром -->
+						<div class="user-header d-flex align-items-center">
+							<img src="@(string.IsNullOrEmpty(Model.PhotoPath) ? Url.Content("~/default-avatar.png") : Url.Content(Model.PhotoPath))"
+								 alt="Аватар"
+								 class="student-avatar rounded-circle me-3"
+								 onerror="this.src='@Url.Content("~/default-avatar.png")'">
+							<div class="account-info">
+								<h4 class="student-name mb-0">
+									@($"{employee.LastName} {employee.FirstName} {employee.MiddleName}")
+								</h4>
+								<p class="student-email mb-0">
+									@Model.Login
+								</p>
+							</div>
+						</div>
 
-                            @* <!-- Личные данные --> *@
-                            <div class="account-details">
-                                <h5>Личные данные</h5>
-                                <p>
-                                    <strong>Дата регистрации:</strong>
-                                    @(Model.CreatedAt?.ToString("dd.MM.yyyy") ?? "Не указана")
-                                </p>
-                                <p><strong>Роль:</strong> @Model.Role?.Name</p>
-                            </div>
+						<!-- Личные данные -->
+						<div class="account-details mt-4">
+							<h5>Личные данные</h5>
+							<p>
+								<strong>Дата регистрации:</strong>
+								@(Model.CreatedAt?.ToString("dd.MM.yyyy") ?? "Не указана")
+							</p>
+							<p><strong>Роль:</strong> @Model.Role?.Name ?? "Не указана"</p>
+						</div>
 
-                            <div class="account-work">
-                                <h5>Служебные данные</h5>
-                                <p><strong>Должность:</strong> @employee.Position?.Name</p>
-                                <p><strong>Отдел:</strong> @employee.Position?.Department?.DepartmentName</p>
-                            </div>
+						<!-- Служебные данные -->
+						<div class="account-work mt-3">
+							<h5>Служебные данные</h5>
+							<p><strong>Должность:</strong> @employee.Position?.Name ?? "Не указана"</p>
+							<p><strong>Отдел:</strong> @employee.Position?.Department?.DepartmentName ?? "Не указано"</p>
+						</div>
 
-                            @* <!-- Действия --> *@
-                            <div class="user-actions mt-4">
-                                @Html.ActionLink("Редактировать профиль", "EditAccount", new { id = Model.UserId },
-                                         new { @class = "btn btn-primary" })
-                            </div>
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="alert alert-warning">
-                        Данные сотрудника не найдены.
-                    </div>
-                }
-            }
-            else
-            {
-                <div class="alert alert-warning">
-                    Данные пользователя не найдены
-                </div>
-            }
-        </div>
-    </div>
+						<!-- Действия -->
+						<div class="user-actions mt-4">
+							@Html.ActionLink("Редактировать профиль", "EditAccount", new { id = Model.UserId }, new { @class = "btn btn-primary" })
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
 </div>

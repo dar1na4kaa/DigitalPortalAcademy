@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание - Академия Транспортных Технологий</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/user.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <header class="header">
+            <div class="header-top py-3">
+                <div class="container-fluid">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="header-page col-auto">
+                            <div><a href="student_dashboard.html">Главная</a></div>
+                        </div>
+                        <div class="header-page col-auto">
+                            <div><a href="shedule.html">Расписание</a></div>
+                        </div>
+                        <div class="header-page col-auto">
+                            <div><a href="view_grade.html">Успеваемость</a></div>
+                        </div>
+                        <div class="header-page col-auto">
+                            <div><a href="curriculum.html">Учебный план</a></div>
+                        </div>
+                        <div class="header-page col-auto">
+                            <div><a href="certificate.html">Справки</a></div>
+                        </div>
+                        <div class="header-page col-auto">
+                            <div><a href="view_news.html">Объявления</a></div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="header-acoount d-flex align-items-center">
+                                <a href="dashboard.html">Личный кабинет</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="main">
+            <div class="container">
+                <div class="schedule-cards">
+                    <div class="schedule-card-body">
+                        <h4>Выберите полугодие:</h4>
+                        <div class="semester-select">
+                            <button class="semester-btn" onclick="showWeeks('semester1')">1-й семестр</button>
+                            <button class="semester-btn" onclick="showWeeks('semester2')">2-й семестр</button>
+                        </div>
+
+                        <!-- Блок с кнопками недель для 1-го семестра -->
+                        <div id="semester1" class="semester-weeks" style="display:none;">
+                            <h4>Выберите неделю 1-го семестра:</h4>
+                            <button class="semester-btn"
+                                onclick="toggleScheduleVisibility('monday')">Понедельник</button>
+                            <button class="semester-btn" onclick="toggleScheduleVisibility('tuesday')">Вторник</button>
+                            <button class="semester-btn" onclick="toggleScheduleVisibility('wednesday')">Среда</button>
+                            <button class="semester-btn" onclick="toggleScheduleVisibility('thursday')">Четверг</button>
+                            <button class="semester-btn" onclick="toggleScheduleVisibility('friday')">Пятница</button>
+                        </div>
+
+                        <!-- Блок с кнопками недель для 2-го семестра -->
+                        <div id="semester2" class="semester-weeks" style="display:none;">
+                            <h4>Выберите неделю 2-го семестра:</h4>
+                            <button class="semester-btn"
+                                onclick="toggleScheduleVisibility('monday')">Понедельник</button>
+                            <button class="semester-btn" onclick="toggleScheduleVisibility('tuesday')">Вторник</button>
+                            <button class="semester-btn" onclick="toggleScheduleVisibility('wednesday')">Среда</button>
+                            <button class="semester-btn" onclick="toggleScheduleVisibility('thursday')">Четверг</button>
+                            <button class="semester-btn" onclick="toggleScheduleVisibility('friday')">Пятница</button>
+                            <button class="semester-btn" onclick="toggleScheduleVisibility('saturday')">Суббота</button>
+                            <button class="semester-btn" onclick="showConsultation()">Консультации</button>
+                        </div>
+                    </div>
+
+                    <!-- Расписание для каждого дня недели -->
+                    <div id="schedule-container" class="schedule-container" id="shedule-container"
+                        style="display:none;">
+                        <div id="monday" class="schedule-day" style="display:none;">
+                            <h4>Понедельник</h4>
+                            <h4>3 корпус</h4>
+                            <ul>
+                                <li>4.<strong> 14:35 - 15:55 </strong> ПОПД 3105 каб.</li>
+                                <li>5.<strong> 15:45 - 17:25</strong> Внедрение ИС 3205 каб.</li>
+                            </ul>
+                        </div>
+                        <div id="tuesday" class="schedule-day" style="display:none;">
+                            <h4>Вторник</h4>
+                            <ul>
+                                <li>4.<strong> 14:35 - 15:55 </strong> ПОПД 3105 каб.</li>
+                                <li>5.<strong> 15:45 - 17:25</strong> Внедрение ИС 3205 каб.</li>
+                            </ul>
+                        </div>
+                        <div id="wednesday" class="schedule-day" style="display:none;">
+                            <h4>Среда</h4>
+                            <ul>
+                                <li>4.<strong> 14:35 - 15:55 </strong> ПОПД 3105 каб.</li>
+                                <li>5.<strong> 15:45 - 17:25</strong> Внедрение ИС 3205 каб.</li>
+                            </ul>
+                        </div>
+                        <div id="thursday" class="schedule-day" style="display:none;">
+                            <h4>Четверг</h4>
+                            <ul>
+                                <li>4.<strong> 14:35 - 15:55 </strong> ПОПД 3105 каб.</li>
+                                <li>5.<strong> 15:45 - 17:25</strong> Внедрение ИС 3205 каб.</li>
+                            </ul>
+                        </div>
+                        <div id="friday" class="schedule-day" style="display:none;">
+                            <h4>Пятница</h4>
+                            <ul>
+                                <li>4.<strong> 14:35 - 15:55 </strong> ПОПД 3105 каб.</li>
+                                <li>5.<strong> 15:45 - 17:25</strong> Внедрение ИС 3205 каб.</li>
+                            </ul>
+                        </div>
+                        <div id="saturday" class="schedule-day" style="display:none;">
+                            <h4>Суббота</h4>
+                            <ul>
+                                <li>4.<strong> 14:35 - 15:55 </strong> ПОПД 3105 каб.</li>
+                                <li>5.<strong> 15:45 - 17:25</strong> Внедрение ИС 3205 каб.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Блок для вывода консультаций -->
+                    <div id="consultations-container" class="consultations-container" style="display:none;">
+                        <h4>Консультации:</h4>
+                        <ul id="consultations-list">
+                            <h5>Консультации по Математике</h5>
+                            <p>Время консультации: понедельник с 14:00 до 16:00.</p>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-bottom py-2">
+                <div class="container-fluid text-center">
+                    <p class="mb-0">&copy; 2024 Академия Транспортных технологий</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/main.js"></script>
+</body>
+
+</html>
