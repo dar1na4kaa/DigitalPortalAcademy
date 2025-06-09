@@ -98,5 +98,14 @@ namespace DigitalPortalAcademy.Services
                 _ => null
             };
         }
+        public Curriculum? GetCurriculumForStudent(int userId)
+        {
+            return _context.Students
+                .Where(s => s.UserId == userId)
+                .SelectMany(s => s.Group.Specialty.Curricula)
+                .OrderByDescending(c => c.StartYear)
+                .FirstOrDefault();
+        }
+
     }
 }

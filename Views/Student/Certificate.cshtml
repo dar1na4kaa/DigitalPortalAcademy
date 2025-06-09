@@ -1,0 +1,55 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+<div class="container">
+    <h3>Справки</h3>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Доступные справки</h5>
+            <p class="card-text">Ниже представлен список справок, которые доступны для скачивания. Для скачивания кликните на название.</p>
+
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="/path/to/reference1.pdf" class="btn btn-primary" download>Справка о текущем обучении</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="/path/to/reference2.pdf" class="btn btn-primary" download>Справка о задолженностях</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="/path/to/reference3.pdf" class="btn btn-primary" download>Справка о посещаемости</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Заказ справки -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Заказать справку</h5>
+            <p class="card-text">Если нужной справки нет в списке, вы можете заказать её.</p>
+
+            <form action="/order_reference" method="POST">
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="reference_type">Тип справки</label>
+                        <select id="reference_type" name="reference_type" class="form-control">
+                            <option value="certificate_current_study">Справка о текущем обучении</option>
+                            <option value="certificate_debt">Справка о задолженностях</option>
+                            <option value="certificate_attendance">Справка о посещаемости</option>
+                            <option value="custom_certificate">Индивидуальная справка</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label for="comment">Комментарий (опционально)</label>
+                        <textarea id="comment" name="comment" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary">Заказать справку</button>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>

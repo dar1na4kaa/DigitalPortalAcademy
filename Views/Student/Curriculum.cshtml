@@ -1,13 +1,25 @@
-﻿@Model String
+﻿@model string?
+
 @{
-	Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
 }
-<div class="container">
-	<div class="card">
-		<div class="card-body">
-			<h3 class="card-title">Учебный план на год</h3>
-			<p class="card-text">Здесь вы можете просмотреть и скачать учебный план на текущий год в формате PDF.</p>
-			<a href="@Model" class="btn-primary" download>Скачать учебный план (PDF)</a>
-		</div>
-	</div>
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Учебный план на год</h3>
+            <p class="card-text">Здесь вы можете просмотреть и скачать учебный план на текущий год в формате PDF.</p>
+
+            @if (!string.IsNullOrEmpty(Model))
+            {
+                <a href="@Model" class="btn btn-primary" download>Скачать учебный план (PDF)</a>
+            }
+            else
+            {
+                <div class="alert alert-warning mt-3">
+                    Учебный план пока не загружен.
+                </div>
+            }
+        </div>
+    </div>
 </div>

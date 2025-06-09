@@ -32,5 +32,20 @@ namespace DigitalPortalAcademy.Controllers
 
             return View(scheduleViewModel);
         }
+        public IActionResult Curriculum()
+        {
+            var userId = HttpContext.GetCurrentUserId();
+            if (userId == null || userId == 0)
+                return NotFound();
+
+            var curriculum = _studentService.GetCurriculumForStudent(userId.Value);
+            if (curriculum == null)
+                return NotFound();
+
+            string planFileUrl = Url.Content(curriculum.PlanFilePath);
+
+            return View(model: planFileUrl);
+        }
+
     }
 }
