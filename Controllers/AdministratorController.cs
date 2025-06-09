@@ -22,10 +22,6 @@ namespace DigitalPortalAcademy.Controllers
         public IActionResult Details(int id)
         {
             var user = _adminService.GetUserById(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
             return View(user);
         }
 
@@ -44,10 +40,14 @@ namespace DigitalPortalAcademy.Controllers
             bool success = _adminService.UpdateUser(model);
             if (!success)
             {
-                return NotFound();
+                TempData["Error"] = "Произошла ошибка при добавлении. Повторите ошибку позже";
+                return RedirectToAction("Edit", "Administrator");
             }
-
-            return RedirectToAction("Dashboard", "Administrator");
+            else
+            {
+                TempData["Success"] = "Пользователь успешно изменен";
+                return RedirectToAction("Edit", "Administrator");
+            }
         }
 
         public IActionResult Delete(int id)
@@ -92,10 +92,16 @@ namespace DigitalPortalAcademy.Controllers
             bool success = _adminService.UpdateAccount(model);
             if (!success)
             {
-                return NotFound();
+                TempData["Error"] = "Произошла ошибка при добавлении. Повторите ошибку позже";
+                return RedirectToAction("EditAccount", "Administrator");
             }
 
-            return RedirectToAction("Dashboard", "Administrator");
+            else
+            {
+                TempData["Success"] = "Аккаунт успешно изменен";
+                return RedirectToAction("EditAccount", "Administrator");
+
+            }
         }
         public IActionResult Index(int? roleId, string? search)
         {

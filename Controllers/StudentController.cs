@@ -80,7 +80,7 @@ namespace DigitalPortalAcademy.Controllers
         {
             var userId = HttpContext.GetCurrentUserId();
             if (userId == null)
-                return Unauthorized();
+                return NotFound();
 
             var model = new PerformanceViewModel();
 
@@ -88,7 +88,6 @@ namespace DigitalPortalAcademy.Controllers
 
             model.MonthsSelectList = GetMonthsSelectList(model.SelectedMonth);
 
-            // Получаем оценки за выбранный месяц (или все, если "все")
             model.PerformanceItems = _studentService.GetPerformance(userId.Value, model.SelectedMonth);
             model.HasDebt = model.PerformanceItems.Any(p => p.Mark == 2);
 
@@ -111,6 +110,7 @@ namespace DigitalPortalAcademy.Controllers
                 Selected = m == selectedMonth
             }).ToList();
         }
+
         [HttpGet]
         public IActionResult Account()
         {
@@ -142,10 +142,15 @@ namespace DigitalPortalAcademy.Controllers
             bool success = _studentService.UpdateAccount(model);
             if (!success)
             {
-                return NotFound();
+                TempData["Error"] = "Произошла ошибка при добавлении. Повторите ошибку позже";
+                return RedirectToAction("EditAccount", "Student");
             }
 
-            return RedirectToAction("Dashboard", "Student");
+            else
+            {
+                TempData["Success"] = "Аккаунт успешно изменен";
+                return RedirectToAction("EditAccount", "Student");
+            }
         }
         [HttpGet]
         public IActionResult Announcements()

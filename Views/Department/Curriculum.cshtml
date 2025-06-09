@@ -1,40 +1,59 @@
 ﻿@{
     Layout = "~/Views/Shared/_LayoutDepartment.cshtml";
 }
-<div class="container">
+
+<div class="container mt-4">
     <div class="card">
         <div class="card-body">
+            @{
+                var message = TempData["Message"] as string;
+                var messageType = TempData["MessageType"] as string;
+            }
+
+            @if (!string.IsNullOrEmpty(message))
+            {
+                <div class="alert @(messageType == "success" ? "alert-success" : "alert-danger")">
+                    @message
+                </div>
+            }
+
             <h3 class="card-title">Учебный план на год</h3>
             <p class="card-text">Выберите курс и специальность, чтобы прикрепить учебный план на текущий год.</p>
 
-            <!-- Форма выбора курса и специальности -->
-            <form id="studyPlanForm">
+            <!-- Форма выбора курса, специальности и файла -->
+            <form asp-action="Curriculum" asp-controller="Department" method="post" enctype="multipart/form-data">
                 <div class="form-container">
-                    <label for="course">Выберите курс:</label>
-                    <select id="course" name="course" required>
-                        <option value="" disabled selected>Выберите курс</option>
-                        <option value="1">1 курс</option>
-                        <option value="2">2 курс</option>
-                        <option value="3">3 курс</option>
-                        <option value="4">4 курс</option>
-                    </select>
 
-                    <label for="specialty">Выберите специальность:</label>
-                    <select id="specialty" name="specialty" required>
-                        <option value="" disabled selected>Выберите специальность</option>
-                        <option value="IT">Информационные технологии</option>
-                        <option value="Economics">Экономика</option>
-                        <option value="Physics">Физика</option>
-                        <option value="Biology">Биология</option>
-                    </select>
-                    <form action="/upload" method="POST" enctype="multipart/form-data">
-                        <label for="study-plan">Выберите файл учебного плана (PDF):</label>
-                        <input type="file" id="study-plan" name="study-plan" accept=".pdf" required>
-                        <button type="submit" class="btn-primary">Прикрепить учебный план</button>
-                    </form>
+                    <div class="mb-3">
+                        <label for="course" class="form-label">Выберите курс:</label>
+                        <select id="course" name="course" class="form-select" required>
+                            <option value="" disabled selected>Выберите курс</option>
+                            <option value="1">1 курс</option>
+                            <option value="2">2 курс</option>
+                            <option value="3">3 курс</option>
+                            <option value="4">4 курс</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="specialty" class="form-label">Выберите специальность:</label>
+                        <select id="specialty" name="specialty" class="form-select" required>
+                            <option value="" disabled selected>Выберите специальность</option>
+                            @foreach (var specialty in ViewBag.Specialties)
+                            {
+                                <option value="@specialty.SpecialtyId">@specialty.SpecialtyName</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="studyPlan" class="form-label">Выберите файл учебного плана (PDF):</label>
+                        <input type="file" id="studyPlan" name="studyPlan" accept=".pdf" class="form-control" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Прикрепить учебный план</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-

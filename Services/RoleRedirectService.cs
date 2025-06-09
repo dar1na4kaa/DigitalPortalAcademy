@@ -15,7 +15,9 @@ namespace DigitalPortalAcademy.Services
             return user.Role.Name switch
             {
                 "Администратор" => controller.RedirectToAction("Dashboard", "Administrator"),
-                "Студент" => controller.RedirectToAction("Dashboard", "Student")            };
+                "Студент" => controller.RedirectToAction("Dashboard", "Student"),
+                "Сотрудник учебной части" => controller.RedirectToAction("Dashboard", "Department"),
+            };
         }
     }
 }

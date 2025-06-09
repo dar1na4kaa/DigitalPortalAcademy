@@ -20,6 +20,7 @@ namespace DigitalPortalAcademy.Services
                 .Include(u => u.Employees)
                 .Include(u => u.Students)
                     .ThenInclude(s => s.Group)
+                        .ThenInclude(s => s.Specialty)
                 .Include(u => u.Teachers)
                 .FirstOrDefault(u => u.UserId == id);
         }
@@ -37,13 +38,13 @@ namespace DigitalPortalAcademy.Services
             string groupName = student.Group.GroupName;
 
             var schedule = new List<SheduleViewModel>
-        {
-            new() { Day = DayOfWeek.Monday },
-            new() { Day = DayOfWeek.Tuesday },
-            new() { Day = DayOfWeek.Wednesday },
-            new() { Day = DayOfWeek.Thursday },
-            new() { Day = DayOfWeek.Friday }
-        };
+                            {
+                                new() { Day = DayOfWeek.Monday },
+                                new() { Day = DayOfWeek.Tuesday },
+                                new() { Day = DayOfWeek.Wednesday },
+                                new() { Day = DayOfWeek.Thursday },
+                                new() { Day = DayOfWeek.Friday }
+                            };
 
             try
             {
