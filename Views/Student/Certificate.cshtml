@@ -1,55 +1,79 @@
-﻿@{
-    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+﻿@using DigitalPortalAcademy.ViewModels.DigitalPortalAcademy.Models.ViewModels
+@model List<ReferenceRequestViewModel>
+
+@{
+	Layout = "~/Views/Shared/_LayoutStudent.cshtml";
 }
 <div class="container">
-    <h3>Справки</h3>
+	<h3>Справки</h3>
 
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Доступные справки</h5>
-            <p class="card-text">Ниже представлен список справок, которые доступны для скачивания. Для скачивания кликните на название.</p>
+	<div class="card">
+		<div class="card-body">
+			<h5 class="card-title">Доступные справки</h5>
+			<p class="card-text">Ниже представлен список справок, которые доступны для скачивания. Для скачивания кликните на название.</p>
 
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <a href="/path/to/reference1.pdf" class="btn btn-primary" download>Справка о текущем обучении</a>
-                </li>
-                <li class="list-group-item">
-                    <a href="/path/to/reference2.pdf" class="btn btn-primary" download>Справка о задолженностях</a>
-                </li>
-                <li class="list-group-item">
-                    <a href="/path/to/reference3.pdf" class="btn btn-primary" download>Справка о посещаемости</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+			@if (Model.Any(m => !string.IsNullOrEmpty(m.FilePath)))
+			{
+				<ul class="list-group">
+					@foreach (var item in Model.Where(m => !string.IsNullOrEmpty(m.FilePath)))
+					{
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span>
+								<strong>@item.ReferenceType</strong> — @item.CreatedAt.ToString("dd.MM.yyyy")
+								@if (!string.IsNullOrWhiteSpace(item.Comment))
+								{
+									<br />
 
-    <!-- Заказ справки -->
-    <div class="card mt-4">
-        <div class="card-body">
-            <h5 class="card-title">Заказать справку</h5>
-            <p class="card-text">Если нужной справки нет в списке, вы можете заказать её.</p>
+									<small class="text-muted">Комментарий: @item.Comment</small>
+								}
+							</span>
+							<a href="@Url.Content(item.FilePath)" class="btn btn-primary" download>Скачать</a>
+						</li>
+					}
+				</ul>
+			}
+			else
+			{
+				<p class="text-muted">У вас пока нет загруженных справок.</p>
+			}
+		</div>
+	</div>
 
-            <form action="/order_reference" method="POST">
-                <div class="form-container">
-                    <div class="form-group">
-                        <label for="reference_type">Тип справки</label>
-                        <select id="reference_type" name="reference_type" class="form-control">
-                            <option value="certificate_current_study">Справка о текущем обучении</option>
-                            <option value="certificate_debt">Справка о задолженностях</option>
-                            <option value="certificate_attendance">Справка о посещаемости</option>
-                            <option value="custom_certificate">Индивидуальная справка</option>
-                        </select>
-                    </div>
+	<!-- Заказ справки -->
+	<div class="card mt-4">
+		<div class="card-body">
+			<h5 class="card-title">Заказать справку</h5>
+			<p class="card-text">Если нужной справки нет в списке, вы можете заказать её.</p>
 
-                    <div class="form-group mt-3">
-                        <label for="comment">Комментарий (опционально)</label>
-                        <textarea id="comment" name="comment" class="form-control" rows="3"></textarea>
-                    </div>
+			<form method="post">
+				<div class="form-group">
+					<label for="referenceType">Тип справки</label>
+					<select id="referenceType" name="ReferenceType" class="form-control" required>
+						<option value="">-- Выберите тип --</option>
+						<option value="Справка о текущем обучении">Справка о текущем обучении</option>
+						<option value="Справка о задолженностях">Справка о задолженностях</option>
+						<option value="Справка о посещаемости">Справка о посещаемости</option>
+						<option value="Индивидуальная справка">Индивидуальная справка</option>
+					</select>
+				</div>
 
-                    <div class="form-group mt-3">
-                        <button type="submit" class="btn btn-primary">Заказать справку</button>
-                    </div>
-            </form>
-        </div>
-    </div>
+				<div class="form-group mt-3">
+					<label for="comment">Комментарий (опционально)</label>
+					<textarea id="comment" name="Comment" class="form-control" rows="3"></textarea>
+				</div>
+
+				<div class="form-group mt-3">
+					<button type="submit" class="btn btn-primary">Заказать справку</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+	<div class="alert alert-success" role="alert">
+		@TempData["SuccessMessage"]
+	</div>
+}
+

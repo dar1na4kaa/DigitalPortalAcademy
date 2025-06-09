@@ -61,6 +61,9 @@ public partial class AcademyContext : DbContext
     public virtual DbSet<TimeSlot> TimeSlots { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Reference> References { get; set; }
+    public virtual DbSet<ReferenceRequest> ReferenceRequests { get; set; }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Server=DESKTOP-6QHTSJ1\\SQLEXPRESS;Database=AttApplication;Trusted_Connection=True;Encrypt = true;TrustServerCertificate = true");
@@ -217,6 +220,17 @@ public partial class AcademyContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Schedules_TimeSlot");
         });
+        modelBuilder.Entity<ReferenceRequest>()
+            .HasOne(rr => rr.Reference)
+            .WithOne(r => r.ReferenceRequest)
+            .HasForeignKey<Reference>(r => r.ReferenceRequestId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ReferenceRequest>()
+            .HasOne(rr => rr.Student)
+            .WithMany(s => s.ReferenceRequests)
+            .HasForeignKey(rr => rr.StudentId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Specialty>(entity =>
         {
@@ -273,6 +287,7 @@ public partial class AcademyContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_User_Role");
         });
+
 
         OnModelCreatingPartial(modelBuilder);
     }

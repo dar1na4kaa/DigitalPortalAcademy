@@ -57,4 +57,7 @@ public partial class Student
     [ForeignKey("UserId")]
     [InverseProperty("Students")]
     public virtual User? User { get; set; }
+    [InverseProperty("Student")]
+    public virtual ICollection<ReferenceRequest> ReferenceRequests { get; set; } = new HashSet<ReferenceRequest>();
 }
+

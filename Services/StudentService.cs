@@ -1,5 +1,6 @@
 ﻿using DigitalPortalAcademy.Models;
 using DigitalPortalAcademy.ViewModels;
+using DigitalPortalAcademy.ViewModels.DigitalPortalAcademy.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace DigitalPortalAcademy.Services
@@ -106,6 +107,40 @@ namespace DigitalPortalAcademy.Services
                 .OrderByDescending(c => c.StartYear)
                 .FirstOrDefault();
         }
+        public List<ReferenceRequestViewModel> GetReferenceRequests(int userId)
+        {
+            var student = _context.Students.FirstOrDefault(s => s.UserId == userId);
+            if (student == null)
+                return new List<ReferenceRequestViewModel>();
 
+            return _context.ReferenceRequests
+                .Include(r => r.Reference)
+                .Where(r => r.StudentId == student.StudentId)
+                .OrderByDescending(r => r.CreatedAt)
+                .Select(r => new ReferenceRequestViewModel
+                {
+                    ReferenceType = r.ReferenceType,
+                    Comment = r.Comment,
+                    CreatedAt = r.CreatedAt,
+                    FilePath = r.Reference != null ? r.Reference.FilePath : null
+                })
+                .ToList();
+        }
+        public void CreateReferenceRequest(int userId, string requestType, string? comment)
+        {
+            var student = _context.Students.FirstOrDefault(s => s.UserId == userId);
+            if (student == null) return;
+
+            var request = new ReferenceRequest
+            {
+                StudentId = student.StudentId,
+                ReferenceType = requestType,
+                Comment = comment,
+                CreatedAt = DateTime.Now
+            };
+
+            _context.ReferenceRequests.Add(request);
+            _context.SaveChanges();
+        }
     }
 }
