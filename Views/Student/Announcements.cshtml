@@ -1,0 +1,37 @@
+﻿@model List<DigitalPortalAcademy.Models.Announcement>
+@{
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Объявления Академии</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Нет активных объявлений.</div>
+    }
+    else
+    {
+        foreach (var announcement in Model)
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@announcement.Title</h5>
+                    <p class="card-text">@announcement.Description</p>
+
+                    <div class="d-flex justify-content-between">
+                        @{
+                            var employee = announcement.Author.Employees?.FirstOrDefault();
+                        }
+                        <small class="text-muted">
+                            Автор: @($"{employee?.LastName} {employee?.FirstName} {employee?.MiddleName??""}")
+                        </small>
+                        <small class="text-muted">
+                            Добавлено: @announcement.CreatedAt?.ToString("dd.MM.yyyy HH:mm")
+                        </small>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

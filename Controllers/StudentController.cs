@@ -3,6 +3,9 @@ using DigitalPortalAcademy.Services;
 using DigitalPortalAcademy.Extensions;
 using DigitalPortalAcademy.ViewModels;
 using DigitalPortalAcademy.ViewModels.DigitalPortalAcademy.Models.ViewModels;
+using DigitalPortalAcademy.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace DigitalPortalAcademy.Controllers
 {
@@ -71,6 +74,83 @@ namespace DigitalPortalAcademy.Controllers
             TempData["SuccessMessage"] = "Запрос на справку успешно отправлен!";
 
             return RedirectToAction(nameof(Certificate));
+        }
+
+        public IActionResult Grades(string month)
+        {
+            var userId = HttpContext.GetCurrentUserId();
+            if (userId == null)
+                return Unauthorized();
+
+            var model = new PerformanceViewModel();
+
+            model.SelectedMonth = month ?? "все";
+
+            model.MonthsSelectList = GetMonthsSelectList(model.SelectedMonth);
+
+            // Получаем оценки за выбранный месяц (или все, если "все")
+            model.PerformanceItems = _studentService.GetPerformance(userId.Value, model.SelectedMonth);
+            model.HasDebt = model.PerformanceItems.Any(p => p.Mark == 2);
+
+            
+            return View(model);
+        }
+
+        private List<SelectListItem> GetMonthsSelectList(string selectedMonth)
+        {
+            var months = new[]
+            {
+        "все", "сентябрь", "октябрь", "ноябрь", "декабрь", "январь", "февраль",
+        "март", "апрель", "май", "июнь"
+    };
+
+            return months.Select(m => new SelectListItem
+            {
+                Text = char.ToUpper(m[0]) + m.Substring(1),
+                Value = m,
+                Selected = m == selectedMonth
+            }).ToList();
+        }
+        [HttpGet]
+        public IActionResult Account()
+        {
+            var userId = HttpContext.GetCurrentUserId();
+            if (userId == null || userId == 0) return NotFound();
+
+            var viewModel = _studentService.GetUserById(userId.Value);
+            if (viewModel == null) return NotFound();
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult EditAccount()
+        {
+            var userId = HttpContext.GetCurrentUserId();
+            if (userId == null || userId == 0) return NotFound();
+
+            var viewModel = _studentService.GetAccountForEdit(userId.Value);
+            if (viewModel == null) return NotFound();
+
+            return View(viewModel);
+        }
+
+
+        [HttpPost]
+        public IActionResult EditAccount(EditAccountInformationViewModel model)
+        {
+            bool success = _studentService.UpdateAccount(model);
+            if (!success)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction("Dashboard", "Student");
+        }
+        [HttpGet]
+        public IActionResult Announcements()
+        {
+            return View(_studentService.GetNews());
         }
 
     }

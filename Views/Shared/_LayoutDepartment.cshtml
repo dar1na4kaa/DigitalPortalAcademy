@@ -12,38 +12,30 @@
 	<script src="@Url.Content("~/js/site.js")" defer></script>
 </head>
 <body>
-	<div class="wrapper">
-		<header class="header">
-			<div class="header-top py-3">
-				<div class="container-fluid">
-					<div class="row justify-content-between align-items-center">
-						<div class="header-page col-auto">
-							<div><a href="@Url.Action("Dashboard", "Student")">Главная</a></div>
-						</div>
-						<div class="header-page col-auto">
-							<div><a href="@Url.Action("Shedule", "Student")">Расписание</a></div>
-						</div>
-						<div class="header-page col-auto">
-							<div><a href="@Url.Action("Grades", "Student")">Успеваемость</a></div>
-						</div>
-						<div class="header-page col-auto">
-							<div><a href="@Url.Action("Curriculum", "Student")">Учебный план</a></div>
-						</div>
-						<div class="header-page col-auto">
-							<div><a href="@Url.Action("Certificate", "Student")">Справки</a></div>
-						</div>
-						<div class="header-page col-auto">
-							<div><a href="@Url.Action("Announcements", "Student")">Объявления</a></div>
-						</div>
-						<div class="col-auto">
-							<div class="header-acoount d-flex align-items-center">
-								<a href="@Url.Action("Account", "Student")">Личный кабинет</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</header>
+        <div class="wrapper">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-top py-3">
+                    <div class="container-fluid">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="header-page col-auto">
+                            <div><a href="@Url.Action("Dashboard", "Department")">Главная</a></div>
+                            </div>
+                            <div class="header-page col-auto">
+							<div><a href="@Url.Action("Curriculum", "Department")">Учебный план</a></div>
+                            </div>
+                            <div class="header-page col-auto">
+							<div><a href="@Url.Action("Annoucements", "Department")">Объявления</a></div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="header-acoount d-flex align-items-center">
+								<a href="@Url.Action("Account", "Department")">Личный кабинет</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
 
 		<main class="main">
 			@RenderBody()

@@ -1,0 +1,80 @@
+﻿@model DigitalPortalAcademy.Models.User
+
+@{
+	Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+
+	var student = Model?.Students?.FirstOrDefault();
+}
+
+<div class="container">
+	<div class="card">
+		<div class="card-body">
+			<h2 class="card-title">Личный кабинет</h2>
+			<p class="card-text">Добро пожаловать! Здесь вы можете управлять своей учетной записью.</p>
+
+			@if (Model == null)
+			{
+				<div class="alert alert-warning">
+					Данные пользователя не найдены.
+				</div>
+			}
+			else if (student == null)
+			{
+				<div class="alert alert-warning">
+					Данные сотрудника не найдены.
+				</div>
+			}
+			else
+			{
+				<div class="users-list">
+					<div class="user-card">
+						<!-- Заголовок с аватаром -->
+						<div class="user-header d-flex align-items-center">
+							@{
+								var defaultPhoto = Url.Content("~/lib/img/files/photo-user/user.jpg");
+								var userPhoto = string.IsNullOrEmpty(Model.PhotoPath)
+								? defaultPhoto
+								: Url.Content("~/lib/img/files/photo-user/" + Model.PhotoPath);
+							}
+							<img src="@userPhoto"
+								 alt="Аватар"
+								 class="student-avatar rounded-circle me-3"
+								 onerror="this.src='@defaultPhoto'">
+							<div class="account-info">
+								<h4 class="student-name mb-0">
+									@($"{student.LastName} {student.FirstName} {student.MiddleName}")
+								</h4>
+								<p class="student-email mb-0">
+									@Model.Login
+								</p>
+							</div>
+						</div>
+
+						<!-- Личные данные -->
+						<div class="account-details mt-4">
+							<h5>Личные данные</h5>
+							<p>
+								<strong>Дата регистрации:</strong>
+								@(Model.CreatedAt?.ToString("dd.MM.yyyy") ?? "Не указана")
+							</p>
+							<p><strong>Роль:</strong> @(@Model.Role?.Name ?? "Не указана")</p>
+						</div>
+
+						<!-- Служебные данные -->
+						<div class="account-work mt-3">
+							<h5>Учебные данные</h5>
+							<p><strong>Группа:</strong> @(student.Group?.GroupName ?? "Не указана")</p>
+							<p><strong>Специальность:</strong> @(student.Group?.Specialty?.SpecialtyName ?? "Не указана")</p>
+
+						</div>
+
+						<!-- Действия -->
+						<div class="user-actions mt-4">
+							@Html.ActionLink("Редактировать профиль", "EditAccount", new { id = Model.UserId }, new { @class = "btn btn-primary" })
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>

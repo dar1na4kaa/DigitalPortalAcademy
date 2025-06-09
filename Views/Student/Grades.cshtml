@@ -1,0 +1,70 @@
+﻿@using System.Linq
+@model PerformanceViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+}
+
+<div class="container">
+    <h2>Успеваемость и аттестация</h2>
+
+    @if (Model.HasDebt)
+    {
+        <div class="alert alert-warning">
+            Внимание! У вас есть долги в аттестации. Обратитесь к преподавателю.
+        </div>
+    }
+
+    <form method="get" asp-action="Grades" asp-controller="Student">
+        <label for="month">Месяц</label>
+        <select id="month" name="month" class="form-select">
+            @foreach (var month in Model.MonthsSelectList)
+            {
+                <option value="@month.Value" selected="@(month.Selected ? "selected" : null)">
+                    @month.Text
+                </option>
+            }
+        </select>
+
+        <button type="submit" class="btn btn-primary mt-2">Показать</button>
+    </form>
+    <hr />
+    <div class="form-container">
+        <h5 class="card-title">Успеваемость @Model.SelectedMonth.ToString()</h5>
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Месяц</th>
+                            <th>Предмет</th>
+                            <th>Оценка</th>
+                            <th>Пропуски (часы)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="performance-table">
+                        @if (Model.PerformanceItems == null || !Model.PerformanceItems.Any())
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center fst-italic text-muted">
+                                    Данные отсутствуют
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var item in Model.PerformanceItems)
+                            {
+                                <tr>
+                                    <td>@item.Month</td>
+                                    <td>@item.Subject</td>
+                                    <td>@(item.Mark?.ToString() ?? "-")</td>
+                                    <td>@(item.MissedHours?.ToString() ?? "-")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

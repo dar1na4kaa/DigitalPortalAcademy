@@ -30,41 +30,47 @@
 					<div class="user-card">
 						<!-- Заголовок с аватаром -->
 						<div class="user-header d-flex align-items-center">
-							<img src="@(string.IsNullOrEmpty(Model.PhotoPath) ? Url.Content("~/default-avatar.png") : Url.Content(Model.PhotoPath))"
+							@{
+								var defaultPhoto = Url.Content("~/lib/img/files/photo-user/user.jpg");
+								var userPhoto = string.IsNullOrEmpty(Model.PhotoPath)
+								? defaultPhoto
+								: Url.Content("~/lib/img/files/photo-user/" + Model.PhotoPath);
+							}
+							<img src="@userPhoto"
 								 alt="Аватар"
 								 class="student-avatar rounded-circle me-3"
-								 onerror="this.src='@Url.Content("~/default-avatar.png")'">
-							<div class="account-info">
-								<h4 class="student-name mb-0">
-									@($"{employee.LastName} {employee.FirstName} {employee.MiddleName}")
-								</h4>
-								<p class="student-email mb-0">
-									@Model.Login
-								</p>
-							</div>
-						</div>
+								 onerror="this.src='@defaultPhoto'">
 
-						<!-- Личные данные -->
-						<div class="account-details mt-4">
-							<h5>Личные данные</h5>
-							<p>
-								<strong>Дата регистрации:</strong>
-								@(Model.CreatedAt?.ToString("dd.MM.yyyy") ?? "Не указана")
+
+							<h4 class="student-name mb-0">
+								@($"{employee.LastName} {employee.FirstName} {employee.MiddleName}")
+							</h4>
+							<p class="student-email mb-0">
+								@Model.Login
 							</p>
-							<p><strong>Роль:</strong> @Model.Role?.Name ?? "Не указана"</p>
 						</div>
+					</div>
 
-						<!-- Служебные данные -->
-						<div class="account-work mt-3">
-							<h5>Служебные данные</h5>
-							<p><strong>Должность:</strong> @employee.Position?.Name ?? "Не указана"</p>
-							<p><strong>Отдел:</strong> @employee.Position?.Department?.DepartmentName ?? "Не указано"</p>
-						</div>
+					<!-- Личные данные -->
+					<div class="account-details mt-4">
+						<h5>Личные данные</h5>
+						<p>
+							<strong>Дата регистрации:</strong>
+							@(Model.CreatedAt?.ToString("dd.MM.yyyy") ?? "Не указана")
+						</p>
+						<p><strong>Роль:</strong> @Model.Role?.Name ?? "Не указана"</p>
+					</div>
 
-						<!-- Действия -->
-						<div class="user-actions mt-4">
-							@Html.ActionLink("Редактировать профиль", "EditAccount", new { id = Model.UserId }, new { @class = "btn btn-primary" })
-						</div>
+					<!-- Служебные данные -->
+					<div class="account-work mt-3">
+						<h5>Служебные данные</h5>
+						<p><strong>Должность:</strong> @employee.Position?.Name ?? "Не указана"</p>
+						<p><strong>Отдел:</strong> @employee.Position?.Department?.DepartmentName ?? "Не указано"</p>
+					</div>
+
+					<!-- Действия -->
+					<div class="user-actions mt-4">
+						@Html.ActionLink("Редактировать профиль", "EditAccount", new { id = Model.UserId }, new { @class = "btn btn-primary" })
 					</div>
 				</div>
 			}
