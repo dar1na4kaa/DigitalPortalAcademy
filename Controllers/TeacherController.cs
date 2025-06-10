@@ -77,8 +77,8 @@ namespace DigitalPortalAcademy.Controllers
             _teacherService.SaveReport(teacherId, model);
             return RedirectToAction("Dashboard");
         }
-        [HttpPost]
-        public IActionResult ReportDetails(int id)
+        [HttpGet]
+        public IActionResult ReportDetail(int id)
         {
             var report = _teacherService.GetReportWithDetails(id);
             if (report == null)
@@ -92,7 +92,5 @@ namespace DigitalPortalAcademy.Controllers
             _teacherService.DeleteReport(id);
             return RedirectToAction("Report");
         }
-
-
     }
 }
