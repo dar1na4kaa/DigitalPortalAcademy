@@ -111,5 +111,14 @@ namespace DigitalPortalAcademy.Controllers
                 return RedirectToAction("EditAccount", "Department");
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+
+            return RedirectToAction("Login", "Authentication");
+        }
     }
 }

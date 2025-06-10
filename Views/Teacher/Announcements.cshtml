@@ -1,42 +1,14 @@
 ﻿@model List<DigitalPortalAcademy.Models.Announcement>
 @{
-	Layout = "~/Views/Shared/_LayoutDepartment.cshtml";
+	Layout = "~/Views/Shared/_LayoutTeacher.cshtml";
 }
-<div class="container">
 
+<div class="container mt-4">
+	<h2 class="mb-4">Объявления Академии</h2>
 	<div class="organization-info">
 		<h2>О нашей организации</h2>
 		<p>Мы — Академия Транспортных Технологий, лидирующее учебное заведение, специализирующееся на подготовке кадров для транспортной отрасли. Наша цель — предоставление качественного образования и развитие профессиональных навыков у студентов, с учетом современных требований рынка труда.</p>
 	</div>
-
-	<div class="add-post-form">
-		<h3>Добавить новость или объявление</h3>
-		@if (TempData["Success"] != null)
-		{
-			<div class="alert alert-success">@TempData["Success"]</div>
-		}
-		@if (TempData["Error"] != null)
-		{
-			<div class="alert alert-danger">@TempData["Error"]</div>
-		}
-		<form asp-action="Annoucements" asp-controller="Department" method="post">
-			<div class="mb-3">
-				<label for="Title" class="form-label">Заголовок</label>
-				<input name="Title" class="form-control" required placeholder="Введите заголовок" />
-			</div>
-			<div class="mb-3">
-				<label for="Description" class="form-label">Содержание</label>
-				<textarea name="Description" class="form-control" rows="5" required placeholder="Введите содержание записи"></textarea>
-			</div>
-			<div class="mb-3">
-				<label for="ExpirationDate" class="form-label">Срок действия</label>
-				<input name="ExpirationDate" type="datetime-local" class="form-control" required />
-			</div>
-			<button type="submit" class="btn btn-primary">Добавить запись</button>
-		</form>
-	</div>
-
-	<!-- Список записей -->
 	<div class="posts-list">
 		@if (!Model.Any())
 		{

@@ -71,7 +71,7 @@ namespace DigitalPortalAcademy.Services
             var user = GetUserById(userId);
             if (user == null) return null;
 
-            var student = user.Students.FirstOrDefault();
+            var student = user.Employees.FirstOrDefault();
 
             return new EditUserViewModel
             {

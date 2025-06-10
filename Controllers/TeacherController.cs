@@ -23,8 +23,9 @@ namespace DigitalPortalAcademy.Controllers
 
         public IActionResult Group()
         {
-            int userId = HttpContext.GetCurrentUserId().Value;
-            var groups = _teacherService.GetTeacherGroups(userId);
+            var teacherId = HttpContext.GetCurrentUserId();
+            if (teacherId == null || teacherId == 0) return NotFound();
+            var groups = _teacherService.GetTeacherGroups(teacherId.Value);
             return View(groups);
         }
 
@@ -37,19 +38,20 @@ namespace DigitalPortalAcademy.Controllers
         [HttpGet]
         public IActionResult Report()
         {
-            int teacherId = HttpContext.GetCurrentUserId().Value;
-            var model = _teacherService.GetInitialReportModel(teacherId);
-            ViewBag.Reports = _teacherService.GetReportsByTeacher(teacherId);
+            var teacherId = HttpContext.GetCurrentUserId();
+            if (teacherId == null || teacherId == 0) return NotFound();
+            var model = _teacherService.GetInitialReportModel(teacherId.Value);
+            ViewBag.Reports = _teacherService.GetReportsByTeacher(teacherId.Value);
             return View(model);
         }
 
         [HttpPost]
         public IActionResult Report(ReportFilterViewModel model)
         {
-            int teacherId = HttpContext.GetCurrentUserId().Value;
-
+            var teacherId = HttpContext.GetCurrentUserId();
+            if (teacherId == null || teacherId == 0) return NotFound();
             var updatedModel = _teacherService.GetReportData(
-                teacherId, model.SelectedGroupId, model.SelectedSubjectId
+                teacherId.Value, model.SelectedGroupId, model.SelectedSubjectId
             );
 
             if (!updatedModel.Subjects.Any(s => s.SubjectId == model.SelectedSubjectId))
@@ -64,17 +66,18 @@ namespace DigitalPortalAcademy.Controllers
         [HttpPost]
         public IActionResult SaveReport(ReportFilterViewModel model)
         {
-            int teacherId = HttpContext.GetCurrentUserId().Value;
+            var teacherId = HttpContext.GetCurrentUserId();
+            if (teacherId == null || teacherId == 0) return NotFound();
 
             if (!ModelState.IsValid)
             {
                 var updatedModel = _teacherService.GetReportData(
-                    teacherId, model.SelectedGroupId, model.SelectedSubjectId
+                    teacherId.Value, model.SelectedGroupId, model.SelectedSubjectId
                 );
                 return View("Report", updatedModel);
             }
 
-            _teacherService.SaveReport(teacherId, model);
+            _teacherService.SaveReport(teacherId.Value, model);
             return RedirectToAction("Dashboard");
         }
         [HttpGet]
@@ -91,6 +94,59 @@ namespace DigitalPortalAcademy.Controllers
         {
             _teacherService.DeleteReport(id);
             return RedirectToAction("Report");
+        }
+        [HttpGet]
+        public IActionResult Account()
+        {
+            var userId = HttpContext.GetCurrentUserId();
+            if (userId == null || userId == 0) return NotFound();
+
+            var viewModel = _teacherService.GetUserById(userId.Value);
+            if (viewModel == null) return NotFound();
+
+            return View(viewModel);
+        }
+        [HttpGet]
+        public IActionResult EditAccount()
+        {
+            var userId = HttpContext.GetCurrentUserId();
+            if (userId == null || userId == 0) return NotFound();
+
+            var viewModel = _teacherService.GetAccountForEdit(userId.Value);
+            if (viewModel == null) return NotFound();
+
+            return View(viewModel);
+        }
+
+
+        [HttpPost]
+        public IActionResult EditAccount(EditAccountInformationViewModel model)
+        {
+            bool success = _teacherService.UpdateAccount(model);
+            if (!success)
+            {
+                TempData["Error"] = "Произошла ошибка при добавлении. Повторите ошибку позже";
+                return RedirectToAction("EditAccount", "Department");
+            }
+            else
+            {
+                TempData["Success"] = "Аккаунт успешно изменен";
+                return RedirectToAction("EditAccount", "Department");
+            }
+        }
+        [HttpGet]
+        public IActionResult Announcements()
+        {
+            return View(_teacherService.GetNews());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+
+            return RedirectToAction("Login", "Authentication");
         }
     }
 }

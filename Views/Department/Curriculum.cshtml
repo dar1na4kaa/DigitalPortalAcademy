@@ -1,59 +1,57 @@
 ﻿@{
-    Layout = "~/Views/Shared/_LayoutDepartment.cshtml";
+	Layout = "~/Views/Shared/_LayoutDepartment.cshtml";
 }
 
 <div class="container mt-4">
-    <div class="card">
-        <div class="card-body">
-            @{
-                var message = TempData["Message"] as string;
-                var messageType = TempData["MessageType"] as string;
-            }
+	<div class="card">
+		<div class="card-body">
+			<h3 class="card-title">Учебный план на год</h3>
+			<p class="card-text">Выберите курс и специальность, чтобы прикрепить учебный план на текущий год.</p>
+		</div>
+		@{
+			var message = TempData["Message"] as string;
+			var messageType = TempData["MessageType"] as string;
+		}
 
-            @if (!string.IsNullOrEmpty(message))
-            {
-                <div class="alert @(messageType == "success" ? "alert-success" : "alert-danger")">
-                    @message
-                </div>
-            }
+		@if (!string.IsNullOrEmpty(message))
+		{
+			<div class="alert @(messageType == "success" ? "alert-success" : "alert-danger")">
+				@message
+			</div>
+		}
+		<!-- Форма выбора курса, специальности и файла -->
+		<form asp-action="Curriculum" asp-controller="Department" method="post" enctype="multipart/form-data">
+			<div class="form-container">
+				<div class="mb-3">
+					<label for="course" class="form-label">Выберите курс:</label>
+					<select id="course" name="course" class="form-select" required>
+						<option value="" disabled selected>Выберите курс</option>
+						<option value="1">1 курс</option>
+						<option value="2">2 курс</option>
+						<option value="3">3 курс</option>
+						<option value="4">4 курс</option>
+					</select>
+				</div>
 
-            <h3 class="card-title">Учебный план на год</h3>
-            <p class="card-text">Выберите курс и специальность, чтобы прикрепить учебный план на текущий год.</p>
+				<div class="mb-3">
+					<label for="specialty" class="form-label">Выберите специальность:</label>
+					<select id="specialty" name="specialty" class="form-select" required>
+						<option value="" disabled selected>Выберите специальность</option>
+						@foreach (var specialty in ViewBag.Specialties)
+						{
+							<option value="@specialty.SpecialtyId">@specialty.SpecialtyName</option>
+						}
+					</select>
+				</div>
 
-            <!-- Форма выбора курса, специальности и файла -->
-            <form asp-action="Curriculum" asp-controller="Department" method="post" enctype="multipart/form-data">
-                <div class="form-container">
+				<div class="mb-3">
+					<label for="studyPlan" class="form-label">Выберите файл учебного плана (PDF):</label>
+					<input type="file" id="studyPlan" name="studyPlan" accept=".pdf" class="form-control" required />
+				</div>
 
-                    <div class="mb-3">
-                        <label for="course" class="form-label">Выберите курс:</label>
-                        <select id="course" name="course" class="form-select" required>
-                            <option value="" disabled selected>Выберите курс</option>
-                            <option value="1">1 курс</option>
-                            <option value="2">2 курс</option>
-                            <option value="3">3 курс</option>
-                            <option value="4">4 курс</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="specialty" class="form-label">Выберите специальность:</label>
-                        <select id="specialty" name="specialty" class="form-select" required>
-                            <option value="" disabled selected>Выберите специальность</option>
-                            @foreach (var specialty in ViewBag.Specialties)
-                            {
-                                <option value="@specialty.SpecialtyId">@specialty.SpecialtyName</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="studyPlan" class="form-label">Выберите файл учебного плана (PDF):</label>
-                        <input type="file" id="studyPlan" name="studyPlan" accept=".pdf" class="form-control" required />
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Прикрепить учебный план</button>
-                </div>
-            </form>
-        </div>
-    </div>
+				<button type="submit" class="btn btn-primary">Прикрепить учебный план</button>
+			</div>
+		</form>
+	</div>
 </div>
+	</div>

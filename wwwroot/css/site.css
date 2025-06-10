@@ -170,7 +170,6 @@ ul.social-icons {
 /* Footer */
 .footer-bottom {
     background-color: var(--contrast-color);
-    color: var(--text-color);
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -179,6 +178,7 @@ ul.social-icons {
 
     .footer-bottom p {
         margin-bottom: 0;
+        color: var(--text-color);
     }
 
 /* Mobile */

@@ -168,7 +168,90 @@ namespace DigitalPortalAcademy.Services
                 _context.SaveChanges();
             }
         }
+        public EditUserViewModel? GetUserForEdit(int userId)
+        {
+            var user = GetUserById(userId);
+            if (user == null) return null;
+
+            var student = user.Teachers.FirstOrDefault();
+
+            return new EditUserViewModel
+            {
+                UserId = user.UserId,
+                Login = user.Login,
+                RoleName = user.Role.Name,
+                FirstName = student?.FirstName ?? string.Empty,
+                LastName = student?.LastName ?? string.Empty,
+                MiddleName = student?.MiddleName ?? string.Empty
+            };
+        }
+        public User? GetUserById(int id)
+        {
+            return _context.Users
+                .Include(u => u.Role)
+                .Include(u => u.Teachers)
+                        .ThenInclude(u => u.CycleCommission)
+                .FirstOrDefault(u => u.UserId == id);
+        }
+        public EditAccountInformationViewModel? GetAccountForEdit(int userId)
+        {
+            var user = GetUserById(userId);
+            if (user == null) return null;
+
+            var teacher = user.Teachers.FirstOrDefault();
+
+            return new EditAccountInformationViewModel
+            {
+                UserId = user.UserId,
+                Login = user.Login,
+                RoleName = user.Role.Name,
+                FirstName = teacher?.FirstName ?? string.Empty,
+                LastName = teacher?.LastName ?? string.Empty,
+                MiddleName = teacher?.MiddleName,
+                CurrentAvatarPath = user.PhotoPath
+            };
+        }
+        public bool UpdateAccount(EditAccountInformationViewModel model)
+        {
+            var user = GetUserById(model.UserId);
+            if (user == null) return false;
+
+            user.Login = model.Login;
+
+            if (model.AvatarFile != null)
+            {
+                var filePath = Path.Combine("wwwroot", "lib", "img", "files", "photo-user", model.AvatarFile.FileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.AvatarFile.CopyTo(stream);
+                }
+
+                user.PhotoPath = model.AvatarFile.FileName;
+            }
+
+            if (!string.IsNullOrEmpty(model.NewPassword))
+                user.PasswordHash =  /*PasswordHasher.HashPassword(model.NewPassword); */ model.NewPassword;
+
+            var teacher = user.Teachers.First();
+            teacher.FirstName = model.FirstName;
+            teacher.LastName = model.LastName;
+            teacher.MiddleName = model.MiddleName;
 
 
+            _context.SaveChanges();
+            return true;
+        }
+        public List<Announcement> GetNews()
+        {
+            var announcements = _context.Announcements
+                                .Include(a => a.Author)
+                                    .ThenInclude(u => u.Employees)
+                                .Where(a => a.IsActive == true &&
+                                            (a.ExpirationDate == null || a.ExpirationDate > DateTime.Now))
+                                .OrderByDescending(a => a.CreatedAt)
+                                .ToList();
+            return announcements;
+        }
     }
 }

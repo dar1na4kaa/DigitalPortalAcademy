@@ -71,6 +71,10 @@
 					<!-- Действия -->
 					<div class="user-actions mt-4">
 						@Html.ActionLink("Редактировать профиль", "EditAccount", new { id = Model.UserId }, new { @class = "btn btn-primary" })
+						@using (Html.BeginForm("Logout", "Administrator", FormMethod.Post, new { @class = "d-inline" }))
+						{
+							<button type="submit" class="btn btn-primary">Выход</button>
+						}
 					</div>
 				</div>
 			}

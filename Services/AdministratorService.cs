@@ -204,5 +204,30 @@ namespace DigitalPortalAcademy.Services
         {
             return _context.Departments.ToList();
         }
+        public List<Announcement> GetAnnouncements()
+        {
+            var announcements = _context.Announcements
+                    .Include(a => a.Author)
+                        .ThenInclude(u => u.Employees)
+                    .Where(a => a.IsActive == true && a.ExpirationDate >= DateTime.Now)
+                    .OrderByDescending(a => a.CreatedAt)
+                    .ToList();
+            return announcements;
+        }
+        public void SaveAnnoucement(AnnouncementAddViewModel model, int userId)
+        {
+            var announcement = new Announcement
+            {
+                Title = model.Title,
+                Description = model.Description,
+                CreatedAt = DateTime.Now,
+                ExpirationDate = model.ExpirationDate,
+                AuthorId = userId,
+                IsActive = true
+            };
+
+            _context.Announcements.Add(announcement);
+            _context.SaveChanges();
+        }
     }
 }

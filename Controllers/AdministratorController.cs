@@ -111,6 +111,38 @@ namespace DigitalPortalAcademy.Controllers
             var users = _adminService.GetFilteredUsers(roleId, search);
             return View(users);
         }
+        [HttpGet]
+        public IActionResult Announcements()
+        {
+            return View(_adminService.GetAnnouncements());
+        }
 
+        [HttpPost]
+        public IActionResult Annoucements(AnnouncementAddViewModel model)
+        {
+            var userId = HttpContext.GetCurrentUserId();
+
+            try
+            {
+                _adminService.SaveAnnoucement(model, userId.Value);
+                TempData["Success"] = "Объявление успешно добавлено";
+                return RedirectToAction("Annoucements");
+            }
+
+            catch
+            {
+                TempData["Error"] = "Произошла ошибка при добавлении. Повторите ошибку позже";
+                return RedirectToAction("Annoucements");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+
+            return RedirectToAction("Login", "Authentication");
+        }
     }
 }

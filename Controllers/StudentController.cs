@@ -158,5 +158,13 @@ namespace DigitalPortalAcademy.Controllers
             return View(_studentService.GetNews());
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+
+            return RedirectToAction("Login", "Authentication");
+        }
     }
 }

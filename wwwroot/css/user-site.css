@@ -111,6 +111,27 @@ html, body {
     margin-bottom: 20px;
 }
 
+.user-details:hover, .user-card:hover, .schedule-card-body:hover, .action-buttons a:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.user-details {
+    color: var(--shadow-text-color);
+}
+
+    .user-details h4, .action-buttons a {
+        font-size: 24px;
+    }
+
+.user-info img, .user-card img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
 /* Кнопки */
 button, .btn-primary, .btn-info, .btn-warning, .btn-danger, .form-container button, .semester-btn {
     border: none;
@@ -150,6 +171,11 @@ button, .btn-primary, .btn-info, .btn-warning, .btn-danger, .form-container butt
     }
 
 /* Стили таблицы студентов и блока информации о группе */
+.row-cols-1.row-cols-md-4 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 200px; /* Пространство между карточками */
+}
 .users-list {
     display: flex;
     flex-direction: column;

@@ -1,9 +1,9 @@
 ﻿@model DigitalPortalAcademy.Models.User
 
 @{
-	Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+	Layout = "~/Views/Shared/_LayoutTeacher.cshtml";
 
-	var student = Model?.Students?.FirstOrDefault();
+	var teacher = Model?.Teachers?.FirstOrDefault();
 }
 
 <div class="container">
@@ -18,10 +18,10 @@
 					Данные пользователя не найдены.
 				</div>
 			}
-			else if (student == null)
+			else if (teacher == null)
 			{
 				<div class="alert alert-warning">
-					Данные студента не найдены.
+					Данные сотрудника не найдены.
 				</div>
 			}
 			else
@@ -42,7 +42,7 @@
 								 onerror="this.src='@defaultPhoto'">
 							<div class="account-info">
 								<h4 class="student-name mb-0">
-									@($"{student.LastName} {student.FirstName} {student.MiddleName}")
+									@($"{teacher.LastName} {teacher.FirstName} {teacher.MiddleName}")
 								</h4>
 								<p class="student-email mb-0">
 									@Model.Login
@@ -62,16 +62,14 @@
 
 						<!-- Служебные данные -->
 						<div class="account-work mt-3">
-							<h5>Учебные данные</h5>
-							<p><strong>Группа:</strong> @(student.Group?.GroupName ?? "Не указана")</p>
-							<p><strong>Специальность:</strong> @(student.Group?.Specialty?.SpecialtyName ?? "Не указана")</p>
-
+							<h5>Служебные данные</h5>
+							<p><strong>Цикловая комиссия: </strong> @(teacher.CycleCommission?.CommissionName ?? "Не указана")</p>
 						</div>
 
 						<!-- Действия -->
 						<div class="user-actions mt-4">
 							@Html.ActionLink("Редактировать профиль", "EditAccount", new { id = Model.UserId }, new { @class = "btn btn-primary" })
-							@using (Html.BeginForm("Logout", "Student", FormMethod.Post, new { @class = "d-inline" }))
+							@using (Html.BeginForm("Logout", "Teacher", FormMethod.Post, new { @class = "d-inline" }))
 							{
 								<button type="submit" class="btn btn-primary">Выход</button>
 							}
