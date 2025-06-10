@@ -30,6 +30,8 @@ namespace DigitalPortalAcademy.Services
             return _context.Users
                 .Include(u => u.Role)
                 .Include(u => u.Employees)
+                        .ThenInclude(u => u.Position)
+                            .ThenInclude(u => u.Department)
                 .Include(u => u.Students)
                 .Include(u => u.Teachers)
                 .FirstOrDefault(u => u.UserId == id);

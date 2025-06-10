@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - DigitalPortalAcademy</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/user-site.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+	<link rel="shortcut icon" href="~/lib/img/icons/favicon.ico">
+	<script src="@Url.Content("~/js/site.js")" defer></script>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top py-3">
+                <div class="container-fluid">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="header-page col-auto">
+                            <div><a href="@Url.Action("Dashboard", "Teacher")">Главная</a></div>
+                        </div>
+                        <div class="header-page col-auto">
+                            <div><a href="@Url.Action("Group", "Teacher")">Группы</a></div>
+                        </div>
+                        <div class="header-page col-auto">
+                            <div><a href="@Url.Action("Report", "Teacher")">Отчетность</a></div>
+                        </div>
+                        <div class="header-page col-auto">
+                            <div><a href="@Url.Action("Annoucements", "Teacher")">Объявления</a></div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="header-acoount d-flex align-items-center">
+                                <a href="@Url.Action("Account", "Teacher")">Личный кабинет</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+		<main class="main">
+			@RenderBody()
+		</main>
+
+		<footer class="footer">
+			<div class="footer-bottom py-2">
+				<div class="container-fluid text-center">
+					<p class="mb-0">&copy; 2024 Академия Транспортных технологий</p>
+				</div>
+			</div>
+		</footer>
+	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script>
+
+	@RenderSection("Scripts", required: false)
+
+</body>
+</html>

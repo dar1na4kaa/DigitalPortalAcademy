@@ -9,7 +9,7 @@ namespace DigitalPortalAcademy.Services
         {
             if (controller == null || user?.Role?.Name == null)
             {
-                return controller.RedirectToAction("AccessDenied", "Home");
+                return controller.RedirectToAction("Login", "Authentication");
             }
 
             return user.Role.Name switch
@@ -17,6 +17,8 @@ namespace DigitalPortalAcademy.Services
                 "Администратор" => controller.RedirectToAction("Dashboard", "Administrator"),
                 "Студент" => controller.RedirectToAction("Dashboard", "Student"),
                 "Сотрудник учебной части" => controller.RedirectToAction("Dashboard", "Department"),
+                "Преподаватель" => controller.RedirectToAction("Dashboard", "Teacher"),
+                null or _ => controller.RedirectToAction("Login", "Authentication")
             };
         }
     }

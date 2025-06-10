@@ -1,0 +1,34 @@
+﻿@model List<DigitalPortalAcademy.Models.Group>
+@{
+    Layout = "~/Views/Shared/_LayoutTeacher.cshtml";
+}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Информация о группах</h5>
+
+            @if (Model == null || !Model.Any())
+            {
+                <div class="alert alert-info mt-3">
+                    У вас нет групп, в которых вы ведёте занятия.
+                </div>
+            }
+            else
+            {
+                foreach (var group in Model)
+                {
+                    <div class="card user-card mb-3">
+                        <div class="card-header">@group.GroupName</div>
+                        <div class="card-body">
+                            <p><strong>Кол-во студентов:</strong> @group.Students.Count</p>
+                            <p><strong>Педагог-организатор:</strong> @group.Curator.LastName @group.Curator.FirstName @group.Curator.MiddleName</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/Teacher/GroupView/@group.GroupId" class="btn btn-primary">Посмотреть</a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

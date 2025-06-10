@@ -88,9 +88,8 @@ namespace DigitalPortalAcademy.Services
             return _context.Users
                 .Include(u => u.Role)
                 .Include(u => u.Employees)
-                .Include(u => u.Students)
-                    .ThenInclude(s => s.Group)
-                .Include(u => u.Teachers)
+                        .ThenInclude(u => u.Position)
+                            .ThenInclude(u => u.Department)
                 .FirstOrDefault(u => u.UserId == id);
         }
         public EditAccountInformationViewModel? GetAccountForEdit(int userId)

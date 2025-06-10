@@ -10,6 +10,7 @@ builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<AdministratorService>();
 builder.Services.AddScoped<StudentService>();
 builder.Services.AddScoped<DepartmentService>();
+builder.Services.AddScoped<TeacherService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache();
 

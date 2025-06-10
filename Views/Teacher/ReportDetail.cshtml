@@ -1,0 +1,47 @@
+﻿@model List<DigitalPortalAcademy.Models.MarksReport>
+
+@{
+    Layout = "~/Views/Shared/_LayoutTeacher.cshtml";
+}
+
+<div class="container mt-5">
+    <h2>Созданные отчёты</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Дата создания</th>
+                    <th>Месяц отчёта</th>
+                    <th>Группа</th>
+                    <th>Предмет</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var report in Model)
+                {
+                    <tr>
+                        <td>@report.CreatedAt.ToString()</td>
+                        <td>@report.ReportMonth.ToString("MM.yyyy")</td>
+                        <td>@report.Pair.Group.GroupName</td>
+                        <td>@report.Pair.TeacherSubject.Subject.SubjectName</td>
+                        <td>
+                            <a asp-action="ReportDetails" asp-route-id="@report.ReportId" class="btn btn-sm btn-primary">Просмотр</a>
+
+                            <form asp-action="DeleteReport" method="post" style="display:inline" onsubmit="return confirm('Удалить этот отчёт?');">
+                                <input type="hidden" name="id" value="@report.ReportId" />
+                                <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Отчёты не найдены.</p>
+    }
+</div>

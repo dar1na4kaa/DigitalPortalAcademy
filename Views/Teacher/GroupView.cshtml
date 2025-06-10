@@ -1,0 +1,56 @@
+﻿@model DigitalPortalAcademy.Models.Group
+@{
+    Layout = "~/Views/Shared/_LayoutTeacher.cshtml";
+}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Информация о группе</h5>
+            <div class="users-list text-black">
+                <!-- Информация о группе -->
+                <div class="group-info">
+                    <h2>Группа: @(string.IsNullOrEmpty(Model.GroupName) ? "Пока нет информации" : Model.GroupName)</h2>
+                    <p><strong>Специальность:</strong> @(Model.Specialty?.SpecialtyName ?? "Пока нет информации")</p>
+                    <p><strong>Куратор:</strong> @(Model.Curator != null ? $"{Model.Curator.LastName} {Model.Curator.FirstName} {Model.Curator.MiddleName}" : "Пока нет информации")</p>
+                </div>
+
+                <!-- Список студентов -->
+                <div class="students-list">
+                    <h2>Список студентов</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Номер </th>
+                                <th> ФИО </th>
+                                <th> Email </th>
+                                <th>Телефон</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Students == null || !Model.Students.Any())
+                            {
+                                <tr>
+                                    <td colspan="6" style="text-align:center;">Пока нет информации</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                var index = 1;
+                                foreach (var student in Model.Students)
+                                {
+                                    <tr>
+                                        <td> @index </td>
+                                        <td> @($"{student.LastName} {student.FirstName} {student.MiddleName}") </td>
+                                        <td> @(string.IsNullOrEmpty(student.PersonalEmail) ? "Пока нет информации " : student.PersonalEmail) </td>
+                                        <td> @(string.IsNullOrEmpty(student.Phone) ? "Пока нет информации" : student.Phone) </td>
+                                    </tr>
+                                    index++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -17,11 +17,9 @@ namespace DigitalPortalAcademy.Services
         {
             return _context.Users
                 .Include(u => u.Role)
-                .Include(u => u.Employees)
                 .Include(u => u.Students)
                     .ThenInclude(s => s.Group)
                         .ThenInclude(s => s.Specialty)
-                .Include(u => u.Teachers)
                 .FirstOrDefault(u => u.UserId == id);
         }
 

@@ -58,14 +58,14 @@
 							<strong>Дата регистрации:</strong>
 							@(Model.CreatedAt?.ToString("dd.MM.yyyy") ?? "Не указана")
 						</p>
-						<p><strong>Роль:</strong> @Model.Role?.Name ?? "Не указана"</p>
+						<p><strong>Роль:</strong> @(@Model.Role?.Name ?? "Не указана")</p>
 					</div>
 
 					<!-- Служебные данные -->
 					<div class="account-work mt-3">
 						<h5>Служебные данные</h5>
-						<p><strong>Должность:</strong> @employee.Position?.Name ?? "Не указана"</p>
-						<p><strong>Отдел:</strong> @employee.Position?.Department?.DepartmentName ?? "Не указано"</p>
+						<p><strong>Должность:</strong> @(@employee.Position?.Name ?? "Не указана")</p>
+						<p><strong>Отделение:</strong> @(@employee.Position?.Department?.DepartmentName ?? "Не указано")</p>
 					</div>
 
 					<!-- Действия -->
