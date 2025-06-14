@@ -67,9 +67,9 @@ namespace DigitalPortalAcademy.Services
 
                     var viewModel = new PairViewModel
                     {
-                        NumberPair = s.TimeSlot.StartTime.ToString(),
+                        NumberPair = s.PairId.ToString(),
                         PairName = s.Pair.TeacherSubject.Subject.SubjectName,
-                        TimeSlot = $"{s.TimeSlot.StartTime:hh\\:mm} - {s.TimeSlot.EndTime:hh\\:mm}",
+                        TimeSlot = $"{s.TimeSlot.StartTime} - {s.TimeSlot.EndTime}",
                         Room = s.Room.RoomName,
                         ClassType = s.ClassType.ClassTypeName
                     };
