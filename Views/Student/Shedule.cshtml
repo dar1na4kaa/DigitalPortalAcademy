@@ -20,7 +20,6 @@
             <h4>Выберите полугодие:</h4>
             <div class="semester-select">
                 <button class="semester-btn" onclick="showWeeks('semester1')" type="button">1-й семестр</button>
-                <button class="semester-btn" onclick="showWeeks('semester2')" type="button">2-й семестр</button>
             </div>
 
             <!-- Кнопки дней для 1-го семестра -->
@@ -39,7 +38,6 @@
                 {
                     <button class="semester-btn" onclick="toggleScheduleVisibility('@day.Key')" type="button">@day.Value</button>
                 }
-                <button class="semester-btn" onclick="showConsultation()">Консультации</button>
             </div>
         </div>
 
@@ -56,7 +54,7 @@
                             @foreach (var pair in daySchedule.Pairs)
                             {
                                 <li>
-                                    @pair.NumberPair.<strong> @pair.TimeSlot</strong> — @pair.PairName — @pair.Room (@pair.ClassType)
+                                    <strong> @pair.TimeSlot</strong> — @pair.PairName — @pair.Room (@pair.ClassType)
                                 </li>
                             }
                         </ul>

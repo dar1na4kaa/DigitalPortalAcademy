@@ -11,7 +11,7 @@
     <p><strong>Дата создания:</strong> @Model.CreatedAt.ToString()</p>
     <p><strong>Месяц отчета:</strong> @Model.ReportMonth.ToString("MM.yyyy")</p>
 
-    <table class="table table-bordered mt-4 text-center align-middle">
+    <table class="table table-bordered mt-4 text-center align-middle" style="background-color: white;">
         <thead class="table-light">
             <tr>
                 <th>№</th>
@@ -24,7 +24,13 @@
             @if (Model.MarksReportDetails != null && Model.MarksReportDetails.Any())
             {
                 var i = 1;
-                foreach (var detail in Model.MarksReportDetails)
+                var sortedDetails = Model.MarksReportDetails
+                .OrderBy(d => d.Student.LastName)
+                .ThenBy(d => d.Student.FirstName)
+                .ThenBy(d => d.Student.MiddleName)
+                .ToList();
+
+                foreach (var detail in sortedDetails)
                 {
                     <tr>
                         <td>@i</td>

@@ -59,9 +59,16 @@
 								</tr>
 							</thead>
 							<tbody>
-								@for (int i = 0; i < Model.Students.Count; i++)
+								@{
+									var sortedStudents = Model.Students
+									.OrderBy(s => s.LastName)
+									.ThenBy(s => s.FirstName)
+									.ThenBy(s => s.MiddleName)
+									.ToList();
+								}
+								@for (int i = 0; i < sortedStudents.Count; i++)
 								{
-									var student = Model.Students[i];
+									var student = sortedStudents[i];
 									var initials = $"{student.LastName} {student.FirstName?[0]}. {student.MiddleName?[0]}.";
 
 									<tr>

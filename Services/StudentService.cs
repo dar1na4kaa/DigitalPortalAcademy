@@ -122,7 +122,7 @@ namespace DigitalPortalAcademy.Services
                     ReferenceType = r.ReferenceType,
                     Comment = r.Comment,
                     CreatedAt = r.CreatedAt,
-                    FilePath = r.Reference != null ? r.Reference.FilePath : null
+                    FilePath = r.Reference != null ? Path.Combine("wwwroot", "lib", "img", "spravki", r.Reference.FilePath) : null
                 })
                 .ToList();
         }

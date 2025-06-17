@@ -78,7 +78,7 @@ namespace DigitalPortalAcademy.Controllers
             }
 
             _teacherService.SaveReport(teacherId.Value, model);
-            return RedirectToAction("Dashboard");
+            return RedirectToAction("Report");
         }
         [HttpGet]
         public IActionResult ReportDetail(int id)

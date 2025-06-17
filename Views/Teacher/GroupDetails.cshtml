@@ -17,6 +17,13 @@
                 <!-- Список студентов -->
                 <div class="students-list">
                     <h2>Список студентов</h2>
+                    @{
+                        var sortedStudents = Model.Students
+                        .OrderBy(s => s.LastName)
+                        .ThenBy(s => s.FirstName)
+                        .ThenBy(s => s.MiddleName)
+                        .ToList();
+                    }
                     <table>
                         <thead>
                             <tr>
@@ -36,7 +43,7 @@
                             else
                             {
                                 var index = 1;
-                                foreach (var student in Model.Students)
+                                foreach (var student in sortedStudents)
                                 {
                                     <tr>
                                         <td> @index </td>
